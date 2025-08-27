@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # Main PANACEA ICONO application
+  panacea-icono:
+    build: .
+    container_name: panacea-icono
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+      - HUGGINGFACE_EMAIL=${HUGGINGFACE_EMAIL}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: panacea-icono-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    container_name: panacea-icono-postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-panacea_icono}
+      - POSTGRES_USER=${POSTGRES_USER:-panacea}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-panacea123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Hugging Face model cache
+  huggingface-cache:
+    image: alpine:latest
+    container_name: panacea-icono-hf-cache
+    volumes:
+      - huggingface_cache:/cache
+    command: "tail -f /dev/null"
+
+volumes:
+  redis_data:
+  postgres_data:
+  huggingface_cache:
+
+networks:
+  default:
+    name: panacea-icono-network
