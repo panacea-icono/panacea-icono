@@ -1,10 +1,14 @@
 version: '3.8'
 
+# 🏥 PANACEA ICONO Docker Compose
+# Orchestrated by: drtv
+
 services:
   # Main PANACEA ICONO application
   panacea-icono:
     build: .
     container_name: panacea-icono
+    image: drtv/panacea-icono:latest
     ports:
       - "8000:8000"
     environment:
@@ -26,6 +30,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    labels:
+      - "maintainer=drtv"
+      - "project=panacea-icono"
 
   # Redis for caching and session management
   redis:
@@ -37,6 +44,9 @@ services:
       - redis_data:/data
     restart: unless-stopped
     command: redis-server --appendonly yes
+    labels:
+      - "maintainer=drtv"
+      - "project=panacea-icono"
 
   # PostgreSQL database
   postgres:
@@ -51,6 +61,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    labels:
+      - "maintainer=drtv"
+      - "project=panacea-icono"
 
   # Hugging Face model cache
   huggingface-cache:
@@ -59,12 +72,21 @@ services:
     volumes:
       - huggingface_cache:/cache
     command: "tail -f /dev/null"
+    labels:
+      - "maintainer=drtv"
+      - "project=panacea-icono"
 
 volumes:
   redis_data:
+    driver: local
   postgres_data:
+    driver: local
   huggingface_cache:
+    driver: local
 
 networks:
   default:
     name: panacea-icono-network
+    labels:
+      - "maintainer=drtv"
+      - "project=panacea-icono"

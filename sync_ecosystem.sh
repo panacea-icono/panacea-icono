@@ -2,6 +2,7 @@
 
 # 🚀 PANACEA ICONO Ecosystem Synchronization Script
 # Sincroniza Docker, Heroku, Hugging Face y GitHub
+# Developed by: drtv
 
 set -e
 
@@ -18,10 +19,15 @@ NC='\033[0m' # No Color
 APP_NAME="panacea-icono-ai"
 HEROKU_APP_URL="https://panacea-icono-ai-78b4eb86c23b.herokuapp.com"
 GITHUB_REPO="panacea-icono/panacea-icono"
-DOCKER_IMAGE="panacea-icono"
+DOCKER_IMAGE="drtv/panacea-icono"
+DOCKER_USERNAME="drtv"
 
 echo -e "${CYAN}🏥 PANACEA ICONO Ecosystem Synchronization${NC}"
 echo "=================================================="
+echo -e "${BLUE}🐳 Docker User: ${DOCKER_USERNAME}${NC}"
+echo -e "${BLUE}🚀 Heroku App: ${APP_NAME}${NC}"
+echo -e "${BLUE}📚 GitHub Repo: ${GITHUB_REPO}${NC}"
+echo ""
 
 # Función para mostrar estado
 show_status() {
@@ -47,7 +53,14 @@ check_docker() {
         return 1
     fi
     
-    echo -e "${GREEN}✅ Docker está funcionando${NC}"
+    # Verificar login de Docker Hub
+    if ! docker info | grep -q "Username"; then
+        echo -e "${YELLOW}⚠️ No hay sesión activa en Docker Hub${NC}"
+        echo -e "${BLUE}💡 Ejecuta: docker login${NC}"
+    else
+        echo -e "${GREEN}✅ Docker está funcionando y autenticado${NC}"
+    fi
+    
     return 0
 }
 
@@ -152,6 +165,28 @@ test_docker() {
     fi
 }
 
+# Función para hacer push a Docker Hub
+push_docker() {
+    echo -e "${YELLOW}📤 Haciendo push a Docker Hub...${NC}"
+    
+    # Verificar si hay sesión activa
+    if ! docker info | grep -q "Username"; then
+        echo -e "${RED}❌ No hay sesión activa en Docker Hub${NC}"
+        echo -e "${BLUE}💡 Ejecuta: docker login${NC}"
+        return 1
+    fi
+    
+    # Hacer push
+    if docker push $DOCKER_IMAGE; then
+        echo -e "${GREEN}✅ Imagen subida a Docker Hub exitosamente${NC}"
+        echo -e "${BLUE}🌐 Disponible en: https://hub.docker.com/r/${DOCKER_USERNAME}/panacea-icono${NC}"
+        return 0
+    else
+        echo -e "${RED}❌ Error al subir imagen a Docker Hub${NC}"
+        return 1
+    fi
+}
+
 # Función para desplegar en Heroku
 deploy_heroku() {
     echo -e "${YELLOW}🚀 Desplegando en Heroku...${NC}"
@@ -206,7 +241,7 @@ sync_github() {
         git add .
         git commit -m "🔄 Sync: Actualización automática del ecosistema
         
-        - 🐳 Docker build y test
+        - 🐳 Docker build y test (drtv)
         - 🚀 Heroku deployment
         - 🤖 Hugging Face integration
         - 📚 GitHub synchronization"
@@ -233,6 +268,8 @@ show_summary() {
     # Estado de Docker
     if docker images | grep -q $DOCKER_IMAGE; then
         echo -e "  🐳 Docker: ${GREEN}✅ Imagen construida${NC}"
+        echo -e "     Usuario: ${DOCKER_USERNAME}"
+        echo -e "     Imagen: ${DOCKER_IMAGE}"
     else
         echo -e "  🐳 Docker: ${RED}❌ Imagen no construida${NC}"
     fi
@@ -298,6 +335,13 @@ main() {
     if [ "$docker_status" = "✅" ]; then
         if build_docker && test_docker; then
             echo -e "${GREEN}✅ Docker sincronizado${NC}"
+            
+            # Intentar hacer push a Docker Hub
+            echo -e "${BLUE}💡 ¿Quieres hacer push a Docker Hub? (y/n)${NC}"
+            read -r response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                push_docker
+            fi
         else
             echo -e "${RED}❌ Error en sincronización de Docker${NC}"
         fi
@@ -334,6 +378,7 @@ main() {
     show_summary
     
     echo -e "${CYAN}🎉 Sincronización del ecosistema completada!${NC}"
+    echo -e "${BLUE}🐳 Docker Hub: https://hub.docker.com/r/${DOCKER_USERNAME}${NC}"
 }
 
 # Ejecutar función principal

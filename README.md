@@ -7,9 +7,13 @@
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Transformers-orange?logo=huggingface)](https://huggingface.co/)
 [![Heroku](https://img.shields.io/badge/Heroku-Deployed-purple?logo=heroku)](https://heroku.com/)
 
+**🐳 Docker Hub**: [drtv/panacea-icono](https://hub.docker.com/r/drtv/panacea-icono)
+
 ## 🚀 Overview
 
 PANACEA ICONO is a comprehensive healthcare AI platform that integrates cutting-edge machine learning models with modern deployment technologies. The project provides secure, scalable, and efficient healthcare solutions powered by AI.
+
+**Developed by**: [drtv](https://hub.docker.com/u/drtv)
 
 ## ✨ Features
 
@@ -26,7 +30,7 @@ PANACEA ICONO is a comprehensive healthcare AI platform that integrates cutting-
 ```
 PANACEA ICONO/
 ├── 🤖 AI Models (OpenAI, Hugging Face)
-├── 🐳 Docker Containers
+├── 🐳 Docker Containers (drtv)
 ├── 🚀 Heroku Deployment
 ├── 🔐 Security & Token Management
 ├── 📊 Health Monitoring
@@ -65,13 +69,26 @@ nano .env
 
 ```bash
 # Build Docker image
-docker build -t panacea-icono .
+docker build -t drtv/panacea-icono .
 
 # Run container
-docker run -p 8000:8000 panacea-icono
+docker run -p 8000:8000 drtv/panacea-icono
+
+# Or use Docker Compose
+docker-compose up -d
 ```
 
-### 4. Heroku Deployment
+### 4. Pull from Docker Hub
+
+```bash
+# Pull pre-built image
+docker pull drtv/panacea-icono:latest
+
+# Run container
+docker run -p 8000:8000 drtv/panacea-icono:latest
+```
+
+### 5. Heroku Deployment
 
 ```bash
 # Login to Heroku
@@ -126,7 +143,7 @@ Edit `ai_models_config_clean.json`:
 ### Build Image
 
 ```bash
-docker build -t panacea-icono .
+docker build -t drtv/panacea-icono .
 ```
 
 ### Run Container
@@ -136,7 +153,7 @@ docker run -d \
   --name panacea-icono \
   -p 8000:8000 \
   -e OPENAI_API_KEY=$OPENAI_API_KEY \
-  panacea-icono
+  drtv/panacea-icono
 ```
 
 ### Docker Compose
@@ -145,12 +162,25 @@ docker run -d \
 version: '3.8'
 services:
   panacea-icono:
-    build: .
+    image: drtv/panacea-icono:latest
     ports:
       - "8000:8000"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+```
+
+### Push to Docker Hub
+
+```bash
+# Login to Docker Hub
+docker login
+
+# Tag image
+docker tag panacea-icono drtv/panacea-icono:latest
+
+# Push image
+docker push drtv/panacea-icono:latest
 ```
 
 ## 🤖 AI Models
@@ -192,9 +222,12 @@ heroku open
 ### Docker Registry
 
 ```bash
-# Push to Docker Hub
-docker tag panacea-icono username/panacea-icono
-docker push username/panacea-icono
+# Push to Docker Hub (drtv)
+docker tag panacea-icono drtv/panacea-icono
+docker push drtv/panacea-icono
+
+# Pull from Docker Hub
+docker pull drtv/panacea-icono:latest
 ```
 
 ## 📊 Monitoring
@@ -207,6 +240,9 @@ docker push username/panacea-icono
 
 # Check logs
 docker logs panacea-icono
+
+# Health endpoint
+curl http://localhost:8000/health
 ```
 
 ### Metrics
@@ -288,6 +324,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Issues**: [GitHub Issues](https://github.com/panacea-icono/panacea-icono/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/panacea-icono/panacea-icono/discussions)
 - **Email**: repositorios.panacea@gmail.com
+- **Docker Hub**: [drtv/panacea-icono](https://hub.docker.com/r/drtv/panacea-icono)
 
 ## 🌟 Acknowledgments
 
@@ -295,9 +332,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Hugging Face for transformers
 - Heroku for hosting
 - Docker for containerization
+- [drtv](https://hub.docker.com/u/drtv) for Docker orchestration
 
 ---
 
 **Made with ❤️ by PANACEA ICONO Team**
 
 [![PANACEA ICONO](https://img.shields.io/badge/PANACEA-ICONO-Healthcare%20AI-blue)](https://panacea-icono-demo-1392a1eb342b.herokuapp.com/)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-drtv%2Fpanacea--icono-blue?logo=docker)](https://hub.docker.com/r/drtv/panacea-icono)

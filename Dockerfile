@@ -1,8 +1,9 @@
 # 🏥 PANACEA ICONO Docker Image
 # Multi-stage build for optimized production image
+# Built by: drtv
 
 # Stage 1: Base Python environment
-FROM python:3.11-slim as base
+FROM python:3.11-slim AS base
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -20,15 +21,17 @@ RUN apt-get update && apt-get install -y \
 # Create app directory
 WORKDIR /app
 
-# Copy requirements files
-COPY requirements.txt poetry.lock pyproject.toml ./
+# Copy requirements files (only if they exist)
+COPY requirements.txt ./
+COPY pyproject.toml* ./
+COPY poetry.lock* ./
 
 # Install Python dependencies
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 # Stage 2: Production image
-FROM python:3.11-slim as production
+FROM python:3.11-slim AS production
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -60,6 +63,13 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 
 # Expose port
 EXPOSE 8000
+
+# Labels
+LABEL maintainer="drtv" \
+      org.opencontainers.image.title="PANACEA ICONO" \
+      org.opencontainers.image.description="AI-Powered Healthcare Solutions" \
+      org.opencontainers.image.vendor="PANACEA ICONO Team" \
+      org.opencontainers.image.author="drtv"
 
 # Default command
 CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
