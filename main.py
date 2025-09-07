@@ -6,7 +6,7 @@ FastAPI application with AI models integration
 
 import os
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Depends
@@ -15,13 +15,22 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 import uvicorn
 
-# Import Hugging Face manager
+# Import Hugging Face manager and ecosystem components
 try:
     from huggingface_config import HuggingFaceManager
+    from ecosystem_manager import EcosystemManager
+    from github_integration import GitHubManager
+    from package_manager import PackageManager
     HF_MANAGER_AVAILABLE = True
-except ImportError:
+    ECOSYSTEM_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"⚠️ Some ecosystem components not available: {e}")
     HuggingFaceManager = None
+    EcosystemManager = None
+    GitHubManager = None
+    PackageManager = None
     HF_MANAGER_AVAILABLE = False
+    ECOSYSTEM_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(
@@ -64,18 +73,31 @@ class TextResponse(BaseModel):
     task: str = Field(description="Task performed")
     model: str = Field(description="Model used")
 
-class ModelInfo(BaseModel):
-    name: str = Field(description="Model name")
-    task: str = Field(description="Task type")
-    status: str = Field(description="Model status")
+class EcosystemRequest(BaseModel):
+    operation: str = Field(description="Ecosystem operation to perform", 
+                          enum=["sync", "report", "readme", "audit", "status"])
+    repository: Optional[str] = Field(description="Target repository name", default=None)
+
+class EcosystemResponse(BaseModel):
+    operation: str = Field(description="Operation performed")
+    success: bool = Field(description="Operation success status")
+    data: Any = Field(description="Operation result data")
+    message: str = Field(description="Status message")
+
+class IssueRequest(BaseModel):
+    repository: str = Field(description="Target repository name", min_length=1)
+    title: str = Field(description="Issue title", min_length=1)
+    body: Optional[str] = Field(description="Issue body", default="")
+    labels: Optional[List[str]] = Field(description="Issue labels", default=[])
 
 # Global variables
 hf_manager: Optional[HuggingFaceManager] = None
+ecosystem_manager: Optional[EcosystemManager] = None
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup"""
-    global hf_manager
+    global hf_manager, ecosystem_manager
     
     logger.info("🚀 Starting PANACEA ICONO application...")
     
@@ -87,6 +109,15 @@ async def startup_event():
         except Exception as e:
             logger.error(f"❌ Error initializing Hugging Face manager: {e}")
             hf_manager = None
+    
+    # Initialize Ecosystem manager
+    if ECOSYSTEM_AVAILABLE and EcosystemManager:
+        try:
+            ecosystem_manager = EcosystemManager()
+            logger.info("✅ Ecosystem manager initialized")
+        except Exception as e:
+            logger.error(f"❌ Error initializing Ecosystem manager: {e}")
+            ecosystem_manager = None
     
     logger.info("🎉 PANACEA ICONO application started successfully!")
 
@@ -115,6 +146,7 @@ async def health_check():
     services = {
         "app": "healthy",
         "huggingface": "healthy" if hf_manager else "unavailable",
+        "ecosystem": "healthy" if ecosystem_manager else "unavailable",
         "docker": "healthy",
         "heroku": "healthy"
     }
@@ -258,20 +290,164 @@ async def download_model(model_name: str, task: Optional[str] = None):
             detail=f"Error downloading model: {str(e)}"
         )
 
+@app.post("/ecosystem/manage", response_model=EcosystemResponse)
+async def manage_ecosystem(request: EcosystemRequest):
+    """Manage ecosystem operations"""
+    if not ecosystem_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="Ecosystem manager not available"
+        )
+    
+    try:
+        operation = request.operation
+        logger.info(f"🌍 Executing ecosystem operation: {operation}")
+        
+        if operation == "sync":
+            result = ecosystem_manager.run_full_ecosystem_sync()
+            success = result.get("summary", {}).get("success", False)
+            message = f"Synchronization {'completed' if success else 'completed with errors'}"
+            
+        elif operation == "report":
+            result = ecosystem_manager.generate_ecosystem_report()
+            success = "error" not in result
+            message = f"Report generated for {result.get('ecosystem', {}).get('total_repositories', 0)} repositories"
+            
+        elif operation == "readme":
+            result = {"updated": ecosystem_manager.update_repository_readme()}
+            success = result["updated"]
+            message = "README updated" if success else "README update failed"
+            
+        elif operation == "audit":
+            result = ecosystem_manager.package_manager.analyze_repository_packages(Path.cwd())
+            success = "error" not in result
+            vulnerabilities = result.get("summary", {}).get("vulnerabilities", 0)
+            message = f"Audit completed. Found {vulnerabilities} vulnerabilities"
+            
+        elif operation == "status":
+            github_ok = ecosystem_manager.github_manager.test_connection()
+            hf_ok = ecosystem_manager.hf_manager.verify_connection() if ecosystem_manager.hf_manager else False
+            
+            result = {
+                "github_connected": github_ok,
+                "huggingface_connected": hf_ok,
+                "reports_directory": str(ecosystem_manager.reports_dir)
+            }
+            success = github_ok
+            message = f"Status check complete. GitHub: {'✅' if github_ok else '❌'}, HF: {'✅' if hf_ok else '❌'}"
+            
+        else:
+            raise HTTPException(status_code=400, detail=f"Unknown operation: {operation}")
+        
+        return EcosystemResponse(
+            operation=operation,
+            success=success,
+            data=result,
+            message=message
+        )
+        
+    except Exception as e:
+        logger.error(f"❌ Error in ecosystem operation {operation}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error executing {operation}: {str(e)}"
+        )
+
+@app.post("/ecosystem/issue", response_model=Dict[str, Any])
+async def create_ecosystem_issue(request: IssueRequest):
+    """Create an issue in a repository"""
+    if not ecosystem_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="Ecosystem manager not available"
+        )
+    
+    try:
+        success = ecosystem_manager.create_ecosystem_issue(
+            request.repository,
+            request.title,
+            request.body,
+            request.labels
+        )
+        
+        if success:
+            return {
+                "success": True,
+                "message": f"Issue created in {request.repository}",
+                "title": request.title
+            }
+        else:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to create issue in {request.repository}"
+            )
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error creating issue: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error creating issue: {str(e)}"
+        )
+
+@app.get("/ecosystem/repositories")
+async def list_repositories():
+    """List all repositories in the ecosystem"""
+    if not ecosystem_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="Ecosystem manager not available"
+        )
+    
+    try:
+        summary = ecosystem_manager.github_manager.generate_ecosystem_summary()
+        
+        repositories = []
+        for repo in summary.get("repositories", []):
+            repositories.append({
+                "name": repo.get("name"),
+                "description": repo.get("description"),
+                "language": repo.get("language"),
+                "stars": repo.get("stars"),
+                "forks": repo.get("forks"),
+                "url": repo.get("url"),
+                "updated_at": repo.get("updated_at")
+            })
+        
+        return {
+            "total_repositories": len(repositories),
+            "repositories": repositories,
+            "statistics": summary.get("statistics", {})
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error listing repositories: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error listing repositories: {str(e)}"
+        )
+
 @app.get("/info")
 async def get_info():
     """Get application information"""
     return {
         "name": "PANACEA ICONO",
         "version": "1.0.0",
-        "description": "AI-Powered Healthcare Solutions",
+        "description": "AI-Powered Healthcare Solutions & Ecosystem Manager",
         "features": [
             "OpenAI Integration",
             "Hugging Face Models",
             "Docker Containerization",
             "Heroku Deployment",
             "FastAPI Web Framework",
-            "Health Monitoring"
+            "Health Monitoring",
+            "GitHub Integration",
+            "Package Management",
+            "Security Auditing",
+            "Ecosystem Automation",
+            "Repository Management",
+            "Issue Management"
         ],
         "endpoints": {
             "root": "/",
@@ -279,6 +455,9 @@ async def get_info():
             "docs": "/docs",
             "ai_process": "/ai/process",
             "ai_models": "/ai/models",
+            "ecosystem_manage": "/ecosystem/manage",
+            "ecosystem_issue": "/ecosystem/issue",
+            "ecosystem_repositories": "/ecosystem/repositories",
             "info": "/info"
         }
     }

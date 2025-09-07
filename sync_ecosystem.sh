@@ -230,21 +230,69 @@ sync_huggingface() {
     fi
 }
 
+# Función para ejecutar gestión del ecosistema
+run_ecosystem_management() {
+    echo -e "${YELLOW}🌍 Ejecutando gestión del ecosistema...${NC}"
+    
+    # Ejecutar el ecosistema manager de Python
+    if python3 ecosystem_manager.py sync; then
+        echo -e "${GREEN}✅ Gestión del ecosistema exitosa${NC}"
+        return 0
+    else
+        echo -e "${RED}❌ Error en gestión del ecosistema${NC}"
+        return 1
+    fi
+}
+
+# Función para actualizar README automáticamente
+update_readme() {
+    echo -e "${YELLOW}📝 Actualizando README automáticamente...${NC}"
+    
+    if python3 ecosystem_manager.py readme; then
+        echo -e "${GREEN}✅ README actualizado exitosamente${NC}"
+        return 0
+    else
+        echo -e "${RED}❌ Error actualizando README${NC}"
+        return 1
+    fi
+}
+
+# Función para auditar paquetes
+audit_packages() {
+    echo -e "${YELLOW}🔍 Auditando paquetes y dependencias...${NC}"
+    
+    if python3 ecosystem_manager.py audit; then
+        echo -e "${GREEN}✅ Auditoría de paquetes completada${NC}"
+        return 0
+    else
+        echo -e "${RED}❌ Error en auditoría de paquetes${NC}"
+        return 1
+    fi
+}
+
 # Función para sincronizar con GitHub
 sync_github() {
     echo -e "${YELLOW}📚 Sincronizando con GitHub...${NC}"
+    
+    # Primero ejecutar la gestión del ecosistema
+    if run_ecosystem_management; then
+        echo -e "${GREEN}✅ Gestión del ecosistema completada${NC}"
+    fi
     
     # Verificar cambios
     if git status --porcelain | grep -q .; then
         echo "📝 Hay cambios pendientes, haciendo commit..."
         
         git add .
-        git commit -m "🔄 Sync: Actualización automática del ecosistema
+        git commit -m "🔄 Sync: Actualización automática del ecosistema $(date +'%Y-%m-%d %H:%M:%S')
         
         - 🐳 Docker build y test (drtv)
         - 🚀 Heroku deployment
         - 🤖 Hugging Face integration
-        - 📚 GitHub synchronization"
+        - 📚 GitHub synchronization
+        - 🌍 Ecosystem management update
+        - 📦 Package audits and updates
+        - 📝 README automation"
         
         if git push origin main; then
             echo -e "${GREEN}✅ Push a GitHub exitoso${NC}"
@@ -365,10 +413,27 @@ main() {
         fi
     fi
     
-    # GitHub
+    # Ecosystem Management
     if [ "$github_status" = "✅" ]; then
+        echo -e "${PURPLE}🌍 Ejecutando gestión completa del ecosistema...${NC}"
+        
+        # Auditoría de paquetes
+        if audit_packages; then
+            echo -e "${GREEN}✅ Auditoría de paquetes completada${NC}"
+        else
+            echo -e "${YELLOW}⚠️ Advertencias en auditoría de paquetes${NC}"
+        fi
+        
+        # Actualizar README
+        if update_readme; then
+            echo -e "${GREEN}✅ README actualizado${NC}"
+        else
+            echo -e "${YELLOW}⚠️ README no actualizado${NC}"
+        fi
+        
+        # Sincronización final con GitHub
         if sync_github; then
-            echo -e "${GREEN}✅ GitHub sincronizado${NC}"
+            echo -e "${GREEN}✅ GitHub sincronizado con gestión del ecosistema${NC}"
         else
             echo -e "${RED}❌ Error en sincronización de GitHub${NC}"
         fi
