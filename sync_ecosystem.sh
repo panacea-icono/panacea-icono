@@ -1,10 +1,14 @@
 #!/bin/bash
 
 # 🚀 PANACEA ICONO Ecosystem Synchronization Script
-# Sincroniza Docker, Heroku, Hugging Face y GitHub
+# Sincroniza Docker, Heroku, Hugging Face y GitHub con reglas de gobernanza
 # Developed by: drtv
 
 set -e
+
+# 🛡️ Governance Rules Version
+GOVERNANCE_VERSION="1.0.0"
+RULES_LAST_UPDATED="2025-09-07"
 
 # Colores para output
 RED='\033[0;31m'
@@ -29,9 +33,136 @@ echo -e "${BLUE}🚀 Heroku App: ${APP_NAME}${NC}"
 echo -e "${BLUE}📚 GitHub Repo: ${GITHUB_REPO}${NC}"
 echo ""
 
-# Función para mostrar estado
+# 🛡️ Función para validar reglas de gobernanza
+validate_governance_rules() {
+    echo -e "${PURPLE}🛡️ Validando reglas de gobernanza...${NC}"
+    
+    local violations=0
+    
+    # Validar estructura de archivos requeridos
+    local required_files=(".github/branch-protection-rules.md" ".github/connection-rules.md" ".gitignore" "README.md")
+    
+    for file in "${required_files[@]}"; do
+        if [ -f "$file" ]; then
+            echo -e "${GREEN}✅ $file encontrado${NC}"
+        else
+            echo -e "${RED}❌ Archivo requerido faltante: $file${NC}"
+            ((violations++))
+        fi
+    done
+    
+    # Validar nombre de rama actual
+    current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
+    echo -e "${BLUE}🌿 Rama actual: $current_branch${NC}"
+    
+    # Validar patrones de rama permitidos
+    allowed_patterns="^(main|develop|feature/[a-z0-9-]+|bugfix/[a-z0-9-]+|hotfix/[a-z0-9-]+|release/v[0-9]+\.[0-9]+\.[0-9]+|copilot/.*)$"
+    
+    if [[ $current_branch =~ $allowed_patterns ]]; then
+        echo -e "${GREEN}✅ Nombre de rama válido${NC}"
+    else
+        echo -e "${RED}❌ Nombre de rama inválido: $current_branch${NC}"
+        echo -e "${YELLOW}💡 Patrones permitidos: main, develop, feature/*, bugfix/*, hotfix/*, release/v*, copilot/*${NC}"
+        ((violations++))
+    fi
+    
+    # Validar que no haya secrets en el código
+    echo -e "${YELLOW}🔍 Escaneando secrets en código...${NC}"
+    if grep -r -E "(api[_-]?key|password|secret|token)[\"'\s]*[:=][\"'\s]*[a-zA-Z0-9]+" . --exclude-dir=.git --exclude="*.md" --exclude="*rules*" >/dev/null 2>&1; then
+        echo -e "${RED}❌ Posibles secrets encontrados en código${NC}"
+        echo -e "${YELLOW}💡 Usar variables de entorno para secrets${NC}"
+        ((violations++))
+    else
+        echo -e "${GREEN}✅ No se encontraron secrets en código${NC}"
+    fi
+    
+    # Mostrar resumen
+    if [ $violations -eq 0 ]; then
+        echo -e "${GREEN}🛡️ Todas las reglas de gobernanza son cumplidas${NC}"
+        return 0
+    else
+        echo -e "${RED}🚨 $violations violación(es) de reglas encontradas${NC}"
+        return 1
+    fi
+}
+
+# 🔗 Función para validar conexiones del ecosistema
+validate_ecosystem_connections() {
+    echo -e "${PURPLE}🔗 Validando conexiones del ecosistema...${NC}"
+    
+    local connection_errors=0
+    
+    # Validar conexión GitHub
+    if git remote get-url origin &> /dev/null; then
+        echo -e "${GREEN}✅ Conexión GitHub configurada${NC}"
+        echo -e "   📚 Repo: $(git remote get-url origin)"
+    else
+        echo -e "${RED}❌ Conexión GitHub no configurada${NC}"
+        ((connection_errors++))
+    fi
+    
+    # Validar configuración Docker
+    if [ -f "Dockerfile" ]; then
+        echo -e "${GREEN}✅ Dockerfile encontrado${NC}"
+        
+        # Validar seguridad en Dockerfile
+        if grep -q "USER root" Dockerfile; then
+            echo -e "${YELLOW}⚠️ Warning: Dockerfile ejecuta como root${NC}"
+        fi
+        
+        if ! grep -q "USER " Dockerfile; then
+            echo -e "${RED}❌ Dockerfile sin instrucción USER - riesgo de seguridad${NC}"
+            ((connection_errors++))
+        fi
+    else
+        echo -e "${RED}❌ Dockerfile no encontrado${NC}"
+        ((connection_errors++))
+    fi
+    
+    # Validar configuración Heroku
+    if [ -n "$HEROKU_API_KEY" ]; then
+        echo -e "${GREEN}✅ HEROKU_API_KEY configurada${NC}"
+    else
+        echo -e "${YELLOW}⚠️ HEROKU_API_KEY no configurada${NC}"
+    fi
+    
+    # Validar configuración Hugging Face
+    if [ -n "$HUGGINGFACE_API_KEY" ]; then
+        echo -e "${GREEN}✅ HUGGINGFACE_API_KEY configurada${NC}"
+    else
+        echo -e "${YELLOW}⚠️ HUGGINGFACE_API_KEY no configurada${NC}"
+    fi
+    
+    # Test de conectividad básica
+    echo -e "${YELLOW}🌐 Probando conectividad...${NC}"
+    
+    if curl -s --max-time 5 https://api.github.com >/dev/null; then
+        echo -e "${GREEN}✅ GitHub API accesible${NC}"
+    else
+        echo -e "${RED}❌ GitHub API no accesible${NC}"
+        ((connection_errors++))
+    fi
+    
+    if curl -s --max-time 5 https://huggingface.co >/dev/null; then
+        echo -e "${GREEN}✅ Hugging Face Hub accesible${NC}"
+    else
+        echo -e "${RED}❌ Hugging Face Hub no accesible${NC}"
+        ((connection_errors++))
+    fi
+    
+    # Mostrar resumen de conexiones
+    if [ $connection_errors -eq 0 ]; then
+        echo -e "${GREEN}🔗 Todas las conexiones están operativas${NC}"
+        return 0
+    else
+        echo -e "${RED}🚨 $connection_errors error(es) de conexión encontrados${NC}"
+        return 1
+    fi
+}
+
+# 📊 Función para mostrar estado de servicios
 show_status() {
-    echo -e "${BLUE}📊 Estado actual:${NC}"
+    echo -e "${BLUE}📊 Estado actual de servicios:${NC}"
     echo "  🐳 Docker: $1"
     echo "  🚀 Heroku: $2"
     echo "  🤖 Hugging Face: $3"
@@ -301,9 +432,26 @@ show_summary() {
 # Función principal
 main() {
     echo -e "${PURPLE}🚀 Iniciando sincronización completa del ecosistema...${NC}"
+    echo -e "${BLUE}🛡️ Governance Version: ${GOVERNANCE_VERSION} (${RULES_LAST_UPDATED})${NC}"
     echo ""
     
-    # Verificaciones iniciales
+    # 🛡️ PASO 1: Validar reglas de gobernanza
+    echo -e "${PURPLE}==== PASO 1: VALIDACIÓN DE GOBERNANZA ====${NC}"
+    if ! validate_governance_rules; then
+        echo -e "${RED}❌ Falló la validación de gobernanza. Abortando sincronización.${NC}"
+        exit 1
+    fi
+    echo ""
+    
+    # 🔗 PASO 2: Validar conexiones del ecosistema
+    echo -e "${PURPLE}==== PASO 2: VALIDACIÓN DE CONEXIONES ====${NC}"
+    if ! validate_ecosystem_connections; then
+        echo -e "${YELLOW}⚠️ Algunas conexiones tienen problemas, pero continuando...${NC}"
+    fi
+    echo ""
+    
+    # 📊 PASO 3: Verificaciones de servicios
+    echo -e "${PURPLE}==== PASO 3: VERIFICACIÓN DE SERVICIOS ====${NC}"
     docker_status="❌"
     heroku_status="❌"
     huggingface_status="❌"

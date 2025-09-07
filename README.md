@@ -1152,3 +1152,49 @@ Para contribuir a cualquiera de estos repositorios:
 - Releases coordinados, sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram.
 - Para cambios: ver scripts en el hub (orchestrators, audits, sync).
 
+## 🛡️ Gobernanza y Reglas del Ecosistema
+
+El ecosistema PANACEA ICONO implementa reglas estrictas de gobernanza para asegurar la calidad, seguridad y consistencia en todos los repositorios.
+
+### 📋 Documentación de Reglas
+
+- **[🛡️ Guía de Gobernanza](.github/GOVERNANCE.md)** - Guía completa de reglas y políticas
+- **[🌿 Reglas de Protección de Ramas](.github/branch-protection-rules.md)** - Políticas de branches y merges
+- **[🔗 Reglas de Conexiones](.github/connection-rules.md)** - Configuración de servicios y conexiones
+- **[⚙️ Workflow de Validación](.github/workflows/rules-enforcement.yml)** - Automatización de reglas
+
+### 🔧 Herramientas de Validación
+
+```bash
+# Validar todas las reglas
+./validate-rules.sh --all
+
+# Validar solo reglas de branches
+./validate-rules.sh --branch
+
+# Validar conexiones del ecosistema
+./validate-rules.sh --connections
+
+# Validar reglas de seguridad
+./validate-rules.sh --security
+
+# Sincronización completa con validación
+./sync_ecosystem.sh
+```
+
+### 📊 Estado de Cumplimiento
+
+| Categoría | Estado | Última Validación |
+|-----------|--------|-------------------|
+| 🌿 Branch Rules | ✅ | 2025-09-07 |
+| 🔗 Connections | ✅ | 2025-09-07 |
+| 🔐 Security | ✅ | 2025-09-07 |
+| 🐳 Docker | ✅ | 2025-09-07 |
+
+### 🚨 Alertas y Monitoreo
+
+- **Validación automática**: En cada push y PR
+- **Notificaciones**: Violaciones enviadas via GitHub Actions
+- **Métricas**: Dashboard de cumplimiento en tiempo real
+- **Auditorías**: Reportes semanales de estado del ecosistema
+

@@ -1,0 +1,306 @@
+name: 🛡️ Branch & Connection Rules Enforcement
+
+on:
+  push:
+    branches: [ main, develop, 'feature/*', 'bugfix/*', 'hotfix/*', 'release/*' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  RULES_VIOLATED: false
+
+jobs:
+  # 📋 Branch Rules Validation
+  branch-rules:
+    name: 📋 Validate Branch Rules
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 🔍 Validate branch name
+      run: |
+        BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+        echo "🌿 Validating branch: $BRANCH_NAME"
+        
+        # Define allowed patterns
+        ALLOWED_PATTERNS=(
+          "^main$"
+          "^develop$"
+          "^feature/[a-z0-9-]+$"
+          "^bugfix/[a-z0-9-]+$"
+          "^hotfix/[a-z0-9-]+$"
+          "^release/v[0-9]+\.[0-9]+\.[0-9]+$"
+          "^copilot/.*$"  # Allow copilot branches
+        )
+        
+        VALID=false
+        for pattern in "${ALLOWED_PATTERNS[@]}"; do
+          if [[ $BRANCH_NAME =~ $pattern ]]; then
+            VALID=true
+            echo "✅ Branch name matches pattern: $pattern"
+            break
+          fi
+        done
+        
+        if [ "$VALID" = false ]; then
+          echo "❌ Invalid branch name: $BRANCH_NAME"
+          echo "📋 Allowed patterns:"
+          printf '%s\n' "${ALLOWED_PATTERNS[@]}"
+          exit 1
+        fi
+    
+    - name: 🚫 Check prohibited actions
+      run: |
+        echo "🔍 Checking for prohibited patterns..."
+        
+        # Check commit messages for prohibited keywords
+        PROHIBITED=("YOLO" "quick fix" "temp" "hack" "TODO: remove")
+        
+        git log --oneline -10 | while read commit; do
+          for word in "${PROHIBITED[@]}"; do
+            if [[ $commit =~ $word ]]; then
+              echo "❌ Prohibited keyword '$word' found in commit: $commit"
+              exit 1
+            fi
+          done
+        done
+        
+        echo "✅ No prohibited patterns found"
+
+  # 🔗 Connection Rules Validation
+  connection-rules:
+    name: 🔗 Validate Connection Rules
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: 🐳 Validate Docker connection
+      run: |
+        echo "🐳 Validating Docker configuration..."
+        
+        if [ -f "Dockerfile" ]; then
+          echo "✅ Dockerfile found"
+          
+          # Check for security best practices
+          if grep -q "USER root" Dockerfile; then
+            echo "⚠️ Warning: Running as root user"
+          fi
+          
+          if ! grep -q "USER " Dockerfile; then
+            echo "❌ No USER instruction found - security risk"
+            exit 1
+          fi
+          
+          echo "✅ Docker configuration validated"
+        else
+          echo "❌ Dockerfile not found"
+          exit 1
+        fi
+        
+    - name: 🚀 Validate Heroku connection
+      run: |
+        echo "🚀 Validating Heroku configuration..."
+        
+        if [ -f "requirements.txt" ] || [ -f "package.json" ]; then
+          echo "✅ Dependencies file found"
+        else
+          echo "❌ No dependencies file found"
+          exit 1
+        fi
+        
+        if [ -f "Procfile" ]; then
+          echo "✅ Procfile found"
+        else
+          echo "⚠️ Warning: No Procfile found"
+        fi
+        
+    - name: 🤖 Validate Hugging Face connection
+      run: |
+        echo "🤖 Validating Hugging Face configuration..."
+        
+        if [ -f "huggingface_config.py" ]; then
+          echo "✅ Hugging Face config found"
+          python -c "import huggingface_config; print('✅ Config imports successfully')"
+        else
+          echo "⚠️ No Hugging Face configuration found"
+        fi
+        
+    - name: 📚 Validate GitHub connection
+      run: |
+        echo "📚 Validating GitHub configuration..."
+        
+        # Check for required files
+        REQUIRED_FILES=(".github/workflows/ci-cd.yml" ".gitignore" "README.md")
+        
+        for file in "${REQUIRED_FILES[@]}"; do
+          if [ -f "$file" ]; then
+            echo "✅ $file found"
+          else
+            echo "❌ Required file missing: $file"
+            exit 1
+          fi
+        done
+
+  # 🔐 Security Rules Validation
+  security-rules:
+    name: 🔐 Validate Security Rules
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔍 Check for secrets in code
+      run: |
+        echo "🔍 Scanning for potential secrets..."
+        
+        # Common secret patterns
+        SECRET_PATTERNS=(
+          "api[_-]?key[\"'\s]*[:=][\"'\s]*[a-zA-Z0-9]+"
+          "password[\"'\s]*[:=][\"'\s]*[a-zA-Z0-9]+"
+          "secret[\"'\s]*[:=][\"'\s]*[a-zA-Z0-9]+"
+          "token[\"'\s]*[:=][\"'\s]*[a-zA-Z0-9]+"
+          "[a-zA-Z0-9_]+_API_KEY[\"'\s]*[:=][\"'\s]*[a-zA-Z0-9]+"
+        )
+        
+        SECRETS_FOUND=false
+        
+        for pattern in "${SECRET_PATTERNS[@]}"; do
+          if grep -r -E "$pattern" . --exclude-dir=.git --exclude="*.md" --exclude="*rules*"; then
+            echo "❌ Potential secret found matching pattern: $pattern"
+            SECRETS_FOUND=true
+          fi
+        done
+        
+        if [ "$SECRETS_FOUND" = true ]; then
+          echo "❌ Potential secrets found in code"
+          exit 1
+        fi
+        
+        echo "✅ No secrets detected in code"
+        
+    - name: 🛡️ Validate .gitignore
+      run: |
+        echo "🛡️ Validating .gitignore configuration..."
+        
+        REQUIRED_IGNORES=(
+          ".env"
+          "*.log"
+          "__pycache__"
+          "node_modules"
+          "*.tmp"
+          "*.backup"
+        )
+        
+        for ignore in "${REQUIRED_IGNORES[@]}"; do
+          if grep -q "$ignore" .gitignore; then
+            echo "✅ $ignore found in .gitignore"
+          else
+            echo "⚠️ Warning: $ignore not found in .gitignore"
+          fi
+        done
+
+  # 📊 Connection Health Check
+  health-check:
+    name: 📊 Connection Health Check
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+        
+    - name: 🔍 Run connection health check
+      run: |
+        echo "🔍 Running connection health check..."
+        
+        # Test GitHub API connection
+        if curl -s https://api.github.com/user > /dev/null; then
+          echo "✅ GitHub API accessible"
+        else
+          echo "❌ GitHub API not accessible"
+        fi
+        
+        # Test Heroku status
+        if curl -s https://status.heroku.com/api/v4/current-status > /dev/null; then
+          echo "✅ Heroku status API accessible"
+        else
+          echo "❌ Heroku status API not accessible"
+        fi
+        
+        # Test Hugging Face Hub
+        if curl -s https://huggingface.co/api/whoami > /dev/null; then
+          echo "✅ Hugging Face Hub accessible"
+        else
+          echo "❌ Hugging Face Hub not accessible"
+        fi
+        
+        echo "✅ Basic health checks completed"
+
+  # 📋 Rules Summary
+  rules-summary:
+    name: 📋 Rules Enforcement Summary
+    runs-on: ubuntu-latest
+    needs: [branch-rules, connection-rules, security-rules, health-check]
+    if: always()
+    
+    steps:
+    - name: 📊 Generate summary
+      run: |
+        echo "## 🛡️ Rules Enforcement Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ needs.branch-rules.result }}" == "success" ]; then
+          echo "✅ Branch Rules: PASSED" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Branch Rules: FAILED" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ needs.connection-rules.result }}" == "success" ]; then
+          echo "✅ Connection Rules: PASSED" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Connection Rules: FAILED" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ needs.security-rules.result }}" == "success" ]; then
+          echo "✅ Security Rules: PASSED" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Security Rules: FAILED" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ needs.health-check.result }}" == "success" ]; then
+          echo "✅ Health Check: PASSED" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ Health Check: SKIPPED or FAILED" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📋 All ecosystem rules have been validated." >> $GITHUB_STEP_SUMMARY
+        echo "🔗 See [connection-rules.md](.github/connection-rules.md) and [branch-protection-rules.md](.github/branch-protection-rules.md) for details." >> $GITHUB_STEP_SUMMARY
