@@ -1,0 +1,147 @@
+{
+    "folders": [
+        {
+            "name": "🏥 panacea-icono (Main Hub)",
+            "path": "/workspaces/panacea-icono"
+        },
+        {
+            "name": "🎯 Ton-telegram (Technical Hub)",
+            "path": "/workspaces/ecosystem/Ton-telegram"
+        },
+        {
+            "name": "📺 Dr_dela_TV (Ecosystem Presenter)",
+            "path": "/workspaces/ecosystem/Dr_dela_TV"
+        },
+        {
+            "name": "🤖 Super-code-tasker (AI Agents)",
+            "path": "/workspaces/ecosystem/Super-code-tasker"
+        },
+        {
+            "name": "🔗 PANACEA-API-CENTRAL-CODEX",
+            "path": "/workspaces/ecosystem/PANACEA-API-CENTRAL-CODEX"
+        },
+        {
+            "name": "💬 gpt-local (Local AI)",
+            "path": "/workspaces/ecosystem/gpt-local"
+        },
+        {
+            "name": "⚡ nextjs-with-supabase",
+            "path": "/workspaces/ecosystem/nextjs-with-supabase"
+        },
+        {
+            "name": "📱 MEDIOS-REDES (Social Bots)",
+            "path": "/workspaces/ecosystem/MEDIOS-REDES"
+        },
+        {
+            "name": "📺 dr-de-la-tvr (TypeScript)",
+            "path": "/workspaces/ecosystem/dr-de-la-tvr"
+        }
+    ],
+    "settings": {
+        "terminal.integrated.cwd": "/workspaces/panacea-icono",
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "typescript.preferences.includePackageJsonAutoImports": "auto",
+        "eslint.workingDirectories": [
+            "/workspaces/ecosystem/Super-code-tasker",
+            "/workspaces/ecosystem/nextjs-with-supabase",
+            "/workspaces/ecosystem/dr-de-la-tvr"
+        ],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+        "files.associations": {
+            "*.sh": "shellscript"
+        },
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/.git": false,
+            "**/__pycache__": true,
+            "**/.pytest_cache": true
+        },
+        "git.repositorySearchDepth": 2,
+        "git.detectSubmodules": true
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.flake8",
+            "ms-python.black-formatter",
+            "ms-python.isort",
+            "ms-vscode.vscode-typescript-next",
+            "bradlc.vscode-tailwindcss",
+            "esbenp.prettier-vscode",
+            "timonwong.shellcheck",
+            "foxundermoon.shell-format",
+            "GitHub.copilot",
+            "GitHub.copilot-chat",
+            "ms-azuretools.vscode-docker",
+            "ms-vscode.remote-repositories"
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "🚀 Sync Ecosystem",
+                "type": "shell",
+                "command": "./sync_ecosystem.sh",
+                "group": "build",
+                "options": {
+                    "cwd": "/workspaces/panacea-icono"
+                },
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                }
+            },
+            {
+                "label": "🧭 Navigate Ecosystem",
+                "type": "shell",
+                "command": "./navigate-ecosystem.sh list",
+                "group": "build",
+                "options": {
+                    "cwd": "/workspaces/panacea-icono"
+                },
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                }
+            },
+            {
+                "label": "🐍 Start FastAPI Server",
+                "type": "shell",
+                "command": "python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload",
+                "group": "build",
+                "options": {
+                    "cwd": "/workspaces/panacea-icono"
+                },
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                }
+            },
+            {
+                "label": "📦 Install Dependencies (All)",
+                "type": "shell",
+                "command": "bash -c 'cd /workspaces/panacea-icono && pip install -r requirements.txt && for dir in /workspaces/ecosystem/*/; do if [ -f \"$dir/package.json\" ]; then echo \"Installing npm deps in $dir\" && cd \"$dir\" && npm install; fi; if [ -f \"$dir/requirements.txt\" ]; then echo \"Installing pip deps in $dir\" && cd \"$dir\" && pip install -r requirements.txt; fi; done'",
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                }
+            }
+        ]
+    }
+}
