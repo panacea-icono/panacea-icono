@@ -16,6 +16,31 @@
 - Canal oficial: https://t.me/drtapiavargas_of
 - Sitio del CEO: https://drtapiavargas.com
 
+## 🚀 Deployment Workflows
+
+Este repositorio incluye **workflows de despliegue avanzados** con:
+
+- **🌍 Multi-Ambiente**: Soporte para development, staging y production
+- **🔗 Rutas de Entorno**: Endpoints específicos para cada entorno objetivo
+- **📝 Gists**: Integración automática con GitHub Gists
+- **🏷️ Tags & Releases**: Gestión automática de tags y releases
+- **📦 Packages**: Administración de paquetes y contenedores
+- **🔗 Links**: Sistema de gestión de enlaces de deployment
+- **📈 Proyecciones**: Analytics y proyecciones de deployment
+
+### Endpoints de Deployment
+- `/deploy/environments` - Estados y objetivos de entornos
+- `/deploy/status/{environment}` - Status de deployment por entorno
+- `/deploy/gist` - Creación de gists de deployment
+- `/deploy/releases` - Información de releases
+- `/deploy/tags` - Información de tags
+- `/deploy/packages` - Gestión de paquetes
+- `/deploy/links` - Enlaces relacionados con deployment
+- `/deploy/projections` - Analytics y proyecciones
+- `/deploy/objectives/{environment}` - Objetivos por entorno
+
+📚 **Documentación completa**: [DEPLOYMENT_WORKFLOWS.md](./DEPLOYMENT_WORKFLOWS.md)
+
 ---
 
 ## Repositorios del Ecosistema
