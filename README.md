@@ -1,20 +1,155 @@
 <!-- PANACEA_ECOSYSTEM_HEADER -->
-# panacea-icono
+# 🏥 PANACEA ICONO SA - Landing Repository
 
-> Parte del ecosistema Panacea | Icono SA. Hub: [Ton-telegram](https://github.com/panacea-icono/Ton-telegram)
+> **REPOSITORIO OFICIAL LANDING DE PANACEA ICONO SOCIEDAD ANÓNIMA**  
+> Landing principal del ecosistema tecnológico y de soluciones de salud con IA
 
-- Organización: [@panacea-icono](https://github.com/panacea-icono)
-- Documentación de repos: [/docs/REPOSITORIES.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOSITORIES.md)
-- Estructura y submódulos: [/docs/REPOS-STRUCTURE.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOS-STRUCTURE.md)
+**🏢 Panacea Icono Sociedad Anónima**  
+- **Tipo**: Repositorio Landing Principal  
+- **Función**: Hub central del ecosistema tecnológico  
+- **Tecnología**: FastAPI + AI/ML + Docker  
 
-# Panacea | Icono SA — Ecosistema
+---
 
-> Hub general del ecosistema. Este repositorio sirve como README maestro con enlaces, estado y documentación.
+## 🎯 Objetivos del Proyecto
 
-- Landing: https://panacea-icono.org
-- Hub técnico: https://github.com/panacea-icono/Ton-telegram
-- Canal oficial: https://t.me/drtapiavargas_of
-- Sitio del CEO: https://drtapiavargas.com
+**PANACEA ICONO SA** es una sociedad anónima dedicada a desarrollar soluciones tecnológicas avanzadas en el sector salud, combinando inteligencia artificial, blockchain y tecnologías emergentes.
+
+### Objetivos Principales:
+- 🏥 **Soluciones de Salud con IA**: Desarrollo de herramientas de diagnóstico y análisis médico
+- 🔗 **Integración Blockchain**: Implementación de tecnologías descentralizadas para el sector salud
+- 🤖 **Automatización Inteligente**: Bots y sistemas automatizados para redes sociales y comunicación
+- 📱 **Aplicaciones Web**: Desarrollo de landing pages y aplicaciones web empresariales
+- 💰 **Soluciones Fintech**: Integración con sistemas de pago y wallets digitales
+
+---
+
+## 🌐 Información Corporativa
+
+**Landing Principal**: https://panacea-icono.org  
+**Hub Técnico**: https://github.com/panacea-icono/Ton-telegram  
+**Canal Oficial**: https://t.me/drtapiavargas_of  
+**CEO Website**: https://drtapiavargas.com  
+**Organización GitHub**: [@panacea-icono](https://github.com/panacea-icono)
+
+---
+
+## 🚀 API Backend - Endpoints y Rutas
+
+Este repositorio contiene una **aplicación FastAPI** con integración de inteligencia artificial y servicios de salud.
+
+### 🔗 Endpoints Principales
+
+| Método | Ruta | Descripción | Respuesta |
+|--------|------|-------------|-----------|
+| `GET` | `/` | Endpoint principal - Información de bienvenida | JSON con datos básicos de la API |
+| `GET` | `/health` | Health check - Estado de servicios | JSON con estado de salud de la aplicación |
+| `GET` | `/info` | Información detallada de la aplicación | JSON con características y endpoints |
+| `GET` | `/docs` | Documentación interactiva Swagger UI | Interfaz web de documentación |
+| `GET` | `/redoc` | Documentación alternativa ReDoc | Interfaz web de documentación |
+
+### 🤖 Endpoints de IA
+
+| Método | Ruta | Descripción | Funcionalidad |
+|--------|------|-------------|---------------|
+| `POST` | `/ai/process` | Procesamiento de texto con IA | Análisis de sentimientos, generación de texto, etc. |
+| `GET` | `/ai/models` | Lista de modelos disponibles | Modelos de Hugging Face disponibles |
+| `GET` | `/ai/models/{model_name}` | Información de modelo específico | Detalles de un modelo particular |
+| `POST` | `/ai/models/{model_name}/download` | Descarga de modelo | Descarga e instalación de modelos IA |
+
+### 📊 Ejemplo de Uso
+
+```bash
+# Verificar estado de la API
+curl https://panacea-icono.org/health
+
+# Procesar texto con IA
+curl -X POST https://panacea-icono.org/ai/process \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Me siento muy bien hoy", "task": "sentiment-analysis"}'
+
+# Listar modelos disponibles
+curl https://panacea-icono.org/ai/models
+```
+
+---
+
+## 🔗 Webhooks y Callbacks
+
+### Configuración de Webhooks
+
+Para integraciones con sistemas externos, la API soporta:
+
+- **Callbacks de pago**: Integración con sistemas de pago TON y otras criptomonedas
+- **Webhooks de Telegram**: Recepción de mensajes y comandos de bots
+- **Notificaciones de salud**: Alertas automáticas de estado de servicios
+
+### URLs de Callback
+
+```bash
+# Webhooks de desarrollo
+POST /webhooks/telegram
+POST /webhooks/payment
+POST /webhooks/health-alerts
+
+# Configuración en variables de entorno
+WEBHOOK_SECRET=your_secret_key
+CALLBACK_URL=https://panacea-icono.org/callbacks
+```
+
+---
+
+## 🌐 Páginas Web y Landing
+
+### Landing Pages del Ecosistema
+
+1. **Landing Principal**: [panacea-icono.org](https://panacea-icono.org)
+   - Información corporativa
+   - Servicios y productos
+   - Contacto empresarial
+
+2. **Hub Técnico**: [github.com/panacea-icono/Ton-telegram](https://github.com/panacea-icono/Ton-telegram)
+   - Documentación técnica
+   - Gestión de repositorios
+   - Automatización y scripts
+
+3. **Páginas Específicas del Ecosistema**:
+   - **UNIVERSOLIFE**: Landing de empresas del grupo
+   - **MEDIOS-REDES**: Gestión de bots y redes sociales
+   - **CASARED**: Soluciones inmobiliarias
+   - **BOMGO CLUB**: Entretenimiento y gaming
+
+---
+
+## 📞 Contacto y Información de la Empresa
+
+### 🏢 Información Corporativa
+
+**PANACEA ICONO SOCIEDAD ANÓNIMA**
+
+- **Razón Social**: Panacea Icono SA
+- **Sector**: Tecnología, Salud, Fintech
+- **Ubicación**: Internacional
+- **Fundación**: 2024
+
+### 📧 Contactos
+
+- **Email Corporativo**: info@iconosa.com
+- **Email Técnico**: tech@panacea-icono.org
+- **Soporte**: support@panacea-icono.org
+
+### 🌐 Redes Sociales y Canales
+
+- **GitHub Organización**: [panacea-icono](https://github.com/panacea-icono)
+- **Canal Oficial Telegram**: [@drtapiavargas_of](https://t.me/drtapiavargas_of)
+- **Website CEO**: [drtapiavargas.com](https://drtapiavargas.com)
+- **Landing Corporativo**: [iconosa.com](https://iconosa.com)
+
+### 👨‍💼 Equipo Directivo
+
+- **CEO**: Dr. Tapia Vargas
+- **CTO**: Equipo de desarrollo distribuido
+- **Área Técnica**: GitHub [@panacea-icono](https://github.com/panacea-icono)
 
 ---
 
@@ -1120,7 +1255,9 @@ cd PANACEA_MD
 
 ---
 
-## 🤝 Contribuir
+---
+
+## 🤝 Contribuir al Ecosistema
 
 Para contribuir a cualquiera de estos repositorios:
 
@@ -1130,25 +1267,40 @@ Para contribuir a cualquiera de estos repositorios:
 4. Push a la rama: `git push origin feature/nueva-funcionalidad`
 5. Abre un Pull Request
 
+### 📋 Documentación Técnica
+
+- **Documentación de repos**: [/docs/REPOSITORIES.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOSITORIES.md)
+- **Estructura y submódulos**: [/docs/REPOS-STRUCTURE.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOS-STRUCTURE.md)
+- **API Docs**: [/docs](https://panacea-icono.org/docs) (Swagger UI)
+
 ---
 
-## 📞 Contacto
+## 🔧 Automatización y Gestión
+
+## 🔧 Automatización y Gestión
+
+- Releases coordinados, sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram.
+- Para cambios: ver scripts en el hub (orchestrators, audits, sync).
+
+### 🚀 Deployment
+
+```bash
+# Desarrollo local
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Docker
+docker build -t panacea-icono .
+docker run -p 8000:8000 panacea-icono
+
+# Docker Compose
+docker-compose up -d
+```
+
+---
+
+## 📞 Contacto Final
 
 - **Email**: info@iconosa.com
 - GitHub: [panacea-icono](https://github.com/panacea-icono)
 - **Web**: https://iconosa.com
-
----
-
-*Última actualización: 7/9/2025, 13:31:00*
-
-*Generado automáticamente por el script de gestión de repositorios de Panas Token Ecosystem*
-
-
----
-
-## Automatización
-
-- Releases coordinados, sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram.
-- Para cambios: ver scripts en el hub (orchestrators, audits, sync).
 

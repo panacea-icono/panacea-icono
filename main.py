@@ -32,8 +32,8 @@ logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="🏥 PANACEA ICONO",
-    description="AI-Powered Healthcare Solutions with Docker and Hugging Face Integration",
+    title="🏥 PANACEA ICONO SA - Landing Repository",
+    description="Landing Repository de Panacea Icono Sociedad Anónima - AI-Powered Healthcare Solutions with Docker and Hugging Face Integration",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -97,13 +97,17 @@ async def shutdown_event():
 
 @app.get("/", response_model=Dict[str, str])
 async def root():
-    """Root endpoint"""
+    """Root endpoint - Landing repository for Panacea Icono SA"""
     return {
-        "message": "🏥 Welcome to PANACEA ICONO!",
-        "description": "AI-Powered Healthcare Solutions",
+        "message": "🏥 Welcome to PANACEA ICONO SA!",
+        "description": "Landing Repository - AI-Powered Healthcare Solutions",
+        "company": "Panacea Icono Sociedad Anónima",
+        "type": "Landing Repository",
         "version": "1.0.0",
+        "website": "https://panacea-icono.org",
         "docs": "/docs",
-        "health": "/health"
+        "health": "/health",
+        "info": "/info"
     }
 
 @app.get("/health", response_model=HealthResponse)
@@ -260,11 +264,20 @@ async def download_model(model_name: str, task: Optional[str] = None):
 
 @app.get("/info")
 async def get_info():
-    """Get application information"""
+    """Get application information - Landing repository details"""
     return {
-        "name": "PANACEA ICONO",
+        "name": "PANACEA ICONO SA",
+        "type": "Landing Repository",
+        "company": "Panacea Icono Sociedad Anónima",
         "version": "1.0.0",
-        "description": "AI-Powered Healthcare Solutions",
+        "description": "Landing Repository - AI-Powered Healthcare Solutions",
+        "objectives": [
+            "AI-Powered Healthcare Solutions",
+            "Blockchain Integration for Health Sector", 
+            "Intelligent Automation Systems",
+            "Web Applications Development",
+            "Fintech Payment Solutions"
+        ],
         "features": [
             "OpenAI Integration",
             "Hugging Face Models",
@@ -280,6 +293,17 @@ async def get_info():
             "ai_process": "/ai/process",
             "ai_models": "/ai/models",
             "info": "/info"
+        },
+        "contact": {
+            "email": "info@iconosa.com",
+            "website": "https://panacea-icono.org",
+            "github": "https://github.com/panacea-icono",
+            "telegram": "https://t.me/drtapiavargas_of"
+        },
+        "ecosystem": {
+            "landing": "https://panacea-icono.org",
+            "technical_hub": "https://github.com/panacea-icono/Ton-telegram",
+            "ceo_website": "https://drtapiavargas.com"
         }
     }
 
