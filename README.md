@@ -16,6 +16,17 @@
 - Canal oficial: https://t.me/drtapiavargas_of
 - Sitio del CEO: https://drtapiavargas.com
 
+## 🔗 Navegación Rápida del Ecosistema
+
+| Categoría | Repositorios Clave | Descripción |
+|-----------|-------------------|-------------|
+| **🎯 Hub Central** | [Ton-telegram](https://github.com/panacea-icono/Ton-telegram) | Bot de telegram wallet y hub de gestión |
+| **🤖 IA & Modelos** | [HUGGING_FACE](https://github.com/panacea-icono/HUGGING_FACE), [GPT-MAESTRO-PANACEA](https://github.com/panacea-icono/GPT-MAESTRO-PANACEA) | Modelos de inteligencia artificial |
+| **🏥 Aplicaciones** | [Dr_dela_TV](https://github.com/panacea-icono/Dr_dela_TV), [UNIVERSOLIFE](https://github.com/panacea-icono/UNIVERSOLIFE) | Apps principales del ecosistema |
+| **💰 Fintech** | [PANAS_PAY_APP](https://github.com/panacea-icono/PANAS_PAY_APP), [PANAS-TOKEN](https://github.com/panacea-icono/PANAS-TOKEN) | Soluciones de pagos y tokenización |
+| **🏗️ Infraestructura** | [PANACEA-API-CENTRAL-CODEX](https://github.com/panacea-icono/PANACEA-API-CENTRAL-CODEX), [codex-main](https://github.com/panacea-icono/codex-main) | APIs y arquitectura |
+| **🔧 Desarrollo** | [Super-code-tasker](https://github.com/panacea-icono/Super-code-tasker), [codex-github](https://github.com/panacea-icono/codex-github) | Herramientas de desarrollo |
+
 ---
 
 ## Repositorios del Ecosistema
@@ -1120,15 +1131,30 @@ cd PANACEA_MD
 
 ---
 
-## 🤝 Contribuir
+## 🤝 Contribuir al Ecosistema
 
+### 🔄 Flujo de Contribución
 Para contribuir a cualquiera de estos repositorios:
 
-1. Fork el repositorio que te interese
-2. Crea una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
-3. Commit tus cambios: `git commit -m 'Add: nueva funcionalidad'`
-4. Push a la rama: `git push origin feature/nueva-funcionalidad`
-5. Abre un Pull Request
+1. **Fork** el repositorio que te interese
+2. **Clona** tu fork: `git clone https://github.com/tu-usuario/repositorio.git`
+3. **Crea** una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
+4. **Desarrolla** siguiendo las guías del ecosistema
+5. **Commit** tus cambios: `git commit -m 'Add: nueva funcionalidad'`
+6. **Push** a la rama: `git push origin feature/nueva-funcionalidad`
+7. **Abre** un Pull Request
+
+### 🔗 Coordinación entre Repositorios
+- **Consulta** siempre el [hub principal](https://github.com/panacea-icono/Ton-telegram) para cambios que afecten múltiples repos
+- **Utiliza** el script `sync_ecosystem.sh` para verificar compatibilidad
+- **Documenta** dependencias entre repositorios en tu PR
+- **Prueba** la integración con otros componentes del ecosistema
+
+### 📋 Guías de Desarrollo
+- **Estilo de código**: Seguir las configuraciones en `pyproject.toml`
+- **Testing**: Ejecutar tests antes de hacer PR
+- **Documentación**: Actualizar READMEs según corresponda
+- **Versionado**: Usar semantic versioning para releases coordinados
 
 ---
 
