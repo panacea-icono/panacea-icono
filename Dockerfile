@@ -27,8 +27,8 @@ COPY pyproject.toml* ./
 COPY poetry.lock* ./
 
 # Install Python dependencies
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+RUN pip install --upgrade pip --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org && \
+    pip install -r requirements.txt --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org
 
 # Stage 2: Production image
 FROM python:3.11-slim AS production

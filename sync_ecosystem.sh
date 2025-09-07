@@ -383,3 +383,43 @@ main() {
 
 # Ejecutar función principal
 main "$@"
+
+# Enhanced error handling and rollback
+cleanup_on_error() {
+    echo -e "${RED}💥 Error detected, cleaning up...${NC}"
+    
+    # Stop any running containers
+    docker stop test-panacea 2>/dev/null || true
+    docker rm test-panacea 2>/dev/null || true
+    
+    echo -e "${YELLOW}🔄 Cleanup completed${NC}"
+}
+
+trap cleanup_on_error ERR
+
+# Enhanced Docker test with health check
+test_docker_enhanced() {
+    echo -e "${YELLOW}🧪 Running enhanced Docker tests...${NC}"
+    
+    # Start container with health check timeout
+    if docker run --rm -d --name test-panacea -p 8000:8000 --health-timeout=30s $DOCKER_IMAGE; then
+        echo -e "${GREEN}✅ Container started${NC}"
+        
+        # Wait for health check
+        sleep 10
+        
+        # Check if container is still running
+        if docker ps | grep -q test-panacea; then
+            echo -e "${GREEN}✅ Container is healthy${NC}"
+            docker stop test-panacea
+            return 0
+        else
+            echo -e "${RED}❌ Container stopped unexpectedly${NC}"
+            docker logs test-panacea
+            return 1
+        fi
+    else
+        echo -e "${RED}❌ Failed to start container${NC}"
+        return 1
+    fi
+}
