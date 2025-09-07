@@ -1216,6 +1216,18 @@ Para contribuir a cualquiera de estos repositorios:
 
 ## Automatización
 
+- **Ecosystem Tracking**: Monitoreo automático de forks y actualizaciones diarias a las 6 AM UTC
+- **Fork Analysis**: Seguimiento de contribuidores externos y repositorios más populares
+- **Activity Feed**: Feed en tiempo real de commits, releases y actividad del ecosistema
 - Releases coordinados, sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram.
 - Para cambios: ver scripts en el hub (orchestrators, audits, sync).
+
+### 🔧 Scripts de Automatización
+
+- `ecosystem_tracker.py` - Rastrea forks y actividad de todos los repositorios
+- `readme_generator.py` - Genera README mejorado con datos del ecosistema  
+- `sync_ecosystem.sh` - Sincronización completa del ecosistema
+- `.github/workflows/ecosystem-update.yml` - Workflow de actualización diaria
+
+📖 **Documentación completa**: [ECOSYSTEM_TRACKING.md](ECOSYSTEM_TRACKING.md)
 

@@ -1,0 +1,158 @@
+name: 🔄 Ecosystem Update
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (7 AM CET)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+  push:
+    branches: [ main ]
+    paths:
+      - 'ecosystem_tracker.py'
+      - 'readme_generator.py'
+      - '.github/workflows/ecosystem-update.yml'
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  update-ecosystem:
+    name: 🔄 Update Ecosystem Data
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: 📦 Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install requests
+        
+    - name: 🔍 Update ecosystem data
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "🔍 Updating ecosystem data..."
+        python ecosystem_tracker.py
+        
+    - name: 📄 Generate enhanced README
+      run: |
+        echo "📄 Generating enhanced README..."
+        python readme_generator.py
+        
+        # Replace original README with enhanced version
+        if [ -f "README_enhanced.md" ]; then
+          cp README_enhanced.md README.md
+          echo "✅ README updated with ecosystem data"
+        fi
+        
+    - name: 📊 Show ecosystem summary
+      run: |
+        echo "📊 Ecosystem Summary:"
+        if [ -f "ecosystem_data.json" ]; then
+          python -c "
+        import json
+        with open('ecosystem_data.json', 'r') as f:
+            data = json.load(f)
+            
+        print(f'  📚 Repositories: {len(data.get(\"repositories\", {}))}')
+        print(f'  🍴 Total forks: {data.get(\"fork_summary\", {}).get(\"total_forks\", 0)}')
+        print(f'  📈 Repositories with forks: {data.get(\"fork_summary\", {}).get(\"repositories_with_forks\", 0)}')
+        print(f'  🎯 Recent activities: {len(data.get(\"recent_activity\", []))}')
+        "
+        fi
+        
+    - name: 🔍 Check for changes
+      id: changes
+      run: |
+        if git diff --quiet; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "📄 No changes detected"
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "📝 Changes detected:"
+          git diff --name-only
+        fi
+        
+    - name: 📝 Commit and push changes
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Add changed files
+        git add README.md ecosystem_data.json README_enhanced.md
+        
+        # Create commit
+        git commit -m "🔄 Auto-update: Ecosystem data and README
+        
+        - 📊 Updated ecosystem statistics
+        - 🍴 Updated fork information
+        - 🎯 Updated activity feed
+        - 📚 Updated repository data
+        
+        Last update: $(date -u +'%Y-%m-%d %H:%M UTC')"
+        
+        # Push changes
+        git push
+        
+    - name: ✅ Success notification
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        echo "✅ Ecosystem data updated successfully!"
+        echo "📊 Changes committed and pushed to repository"
+        
+    - name: 📋 No changes notification  
+      if: steps.changes.outputs.changed == 'false'
+      run: |
+        echo "✅ Ecosystem check completed"
+        echo "📄 No updates needed at this time"
+        
+    - name: 💾 Upload artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: ecosystem-data
+        path: |
+          ecosystem_data.json
+          README_enhanced.md
+        retention-days: 7
+
+  notify-status:
+    name: 📢 Notify Status
+    runs-on: ubuntu-latest
+    needs: update-ecosystem
+    if: always()
+    
+    steps:
+    - name: 📢 Success notification
+      if: needs.update-ecosystem.result == 'success'
+      run: |
+        echo "✅ Ecosystem update completed successfully!"
+        echo "🔄 All repository data is up to date"
+        
+    - name: 📢 Failure notification
+      if: needs.update-ecosystem.result == 'failure'
+      run: |
+        echo "❌ Ecosystem update failed!"
+        echo "🔍 Check the logs for details"
+        exit 1
