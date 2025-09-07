@@ -6,7 +6,7 @@ FastAPI application with AI models integration
 
 import os
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Depends
@@ -22,6 +22,14 @@ try:
 except ImportError:
     HuggingFaceManager = None
     HF_MANAGER_AVAILABLE = False
+
+# Import OpenAI manager
+try:
+    from openai_config import OpenAIManager
+    OPENAI_MANAGER_AVAILABLE = True
+except ImportError:
+    OpenAIManager = None
+    OPENAI_MANAGER_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(
@@ -69,13 +77,48 @@ class ModelInfo(BaseModel):
     task: str = Field(description="Task type")
     status: str = Field(description="Model status")
 
+# OpenAI Code-related models
+class CodeGenerationRequest(BaseModel):
+    task: str = Field(description="Task description for code generation", min_length=1)
+    language: str = Field(description="Programming language", default="python")
+    requirements: str = Field(description="Additional requirements", default="")
+    model: Optional[str] = Field(description="OpenAI model to use", default=None)
+
+class CodeExplanationRequest(BaseModel):
+    code: str = Field(description="Code to explain", min_length=1)
+    language: str = Field(description="Programming language", default="python")
+    model: Optional[str] = Field(description="OpenAI model to use", default=None)
+
+class CodeCompletionRequest(BaseModel):
+    partial_code: str = Field(description="Partial code to complete", min_length=1)
+    context: str = Field(description="Additional context", default="")
+    language: str = Field(description="Programming language", default="python")
+    model: Optional[str] = Field(description="OpenAI model to use", default=None)
+
+class CodeReviewRequest(BaseModel):
+    code: str = Field(description="Code to review", min_length=1)
+    language: str = Field(description="Programming language", default="python")
+    model: Optional[str] = Field(description="OpenAI model to use", default=None)
+
+class CodeChatRequest(BaseModel):
+    message: str = Field(description="Chat message about code", min_length=1)
+    conversation_history: Optional[List[Dict[str, str]]] = Field(description="Previous conversation", default=None)
+    model: Optional[str] = Field(description="OpenAI model to use", default=None)
+
+class CodeResponse(BaseModel):
+    result: str = Field(description="Generated result")
+    task: str = Field(description="Task performed")
+    model: str = Field(description="Model used")
+    language: str = Field(description="Programming language")
+
 # Global variables
 hf_manager: Optional[HuggingFaceManager] = None
+openai_manager: Optional[OpenAIManager] = None
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup"""
-    global hf_manager
+    global hf_manager, openai_manager
     
     logger.info("🚀 Starting PANACEA ICONO application...")
     
@@ -87,6 +130,15 @@ async def startup_event():
         except Exception as e:
             logger.error(f"❌ Error initializing Hugging Face manager: {e}")
             hf_manager = None
+    
+    # Initialize OpenAI manager
+    if OPENAI_MANAGER_AVAILABLE and OpenAIManager:
+        try:
+            openai_manager = OpenAIManager()
+            logger.info("✅ OpenAI manager initialized")
+        except Exception as e:
+            logger.error(f"❌ Error initializing OpenAI manager: {e}")
+            openai_manager = None
     
     logger.info("🎉 PANACEA ICONO application started successfully!")
 
@@ -115,6 +167,7 @@ async def health_check():
     services = {
         "app": "healthy",
         "huggingface": "healthy" if hf_manager else "unavailable",
+        "openai": "healthy" if openai_manager else "unavailable",
         "docker": "healthy",
         "heroku": "healthy"
     }
@@ -129,6 +182,17 @@ async def health_check():
         except Exception as e:
             logger.error(f"Error checking Hugging Face health: {e}")
             services["huggingface"] = "error"
+    
+    # Test OpenAI connection if available
+    if openai_manager:
+        try:
+            if openai_manager.verify_connection():
+                services["openai"] = "healthy"
+            else:
+                services["openai"] = "unhealthy"
+        except Exception as e:
+            logger.error(f"Error checking OpenAI health: {e}")
+            services["openai"] = "error"
     
     return HealthResponse(
         status="healthy",
@@ -258,6 +322,199 @@ async def download_model(model_name: str, task: Optional[str] = None):
             detail=f"Error downloading model: {str(e)}"
         )
 
+# OpenAI Code endpoints
+@app.post("/ai/code/generate", response_model=CodeResponse)
+async def generate_code(request: CodeGenerationRequest):
+    """Generate code using OpenAI"""
+    if not openai_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="OpenAI service not available"
+        )
+    
+    try:
+        result = openai_manager.generate_code(
+            task=request.task,
+            language=request.language,
+            requirements=request.requirements,
+            model=request.model
+        )
+        
+        if not result:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to generate code"
+            )
+        
+        return CodeResponse(
+            result=result,
+            task="code_generation",
+            model=request.model or openai_manager.code_models["code_generation"],
+            language=request.language
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating code: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error generating code: {str(e)}"
+        )
+
+@app.post("/ai/code/explain", response_model=CodeResponse)
+async def explain_code(request: CodeExplanationRequest):
+    """Explain code using OpenAI"""
+    if not openai_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="OpenAI service not available"
+        )
+    
+    try:
+        result = openai_manager.explain_code(
+            code=request.code,
+            language=request.language,
+            model=request.model
+        )
+        
+        if not result:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to explain code"
+            )
+        
+        return CodeResponse(
+            result=result,
+            task="code_explanation",
+            model=request.model or openai_manager.code_models["code_explanation"],
+            language=request.language
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error explaining code: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error explaining code: {str(e)}"
+        )
+
+@app.post("/ai/code/complete", response_model=CodeResponse)
+async def complete_code(request: CodeCompletionRequest):
+    """Complete code using OpenAI"""
+    if not openai_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="OpenAI service not available"
+        )
+    
+    try:
+        result = openai_manager.complete_code(
+            partial_code=request.partial_code,
+            context=request.context,
+            language=request.language,
+            model=request.model
+        )
+        
+        if not result:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to complete code"
+            )
+        
+        return CodeResponse(
+            result=result,
+            task="code_completion",
+            model=request.model or openai_manager.code_models["code_completion"],
+            language=request.language
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error completing code: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error completing code: {str(e)}"
+        )
+
+@app.post("/ai/code/review", response_model=CodeResponse)
+async def review_code(request: CodeReviewRequest):
+    """Review code using OpenAI"""
+    if not openai_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="OpenAI service not available"
+        )
+    
+    try:
+        result = openai_manager.review_code(
+            code=request.code,
+            language=request.language,
+            model=request.model
+        )
+        
+        if not result:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to review code"
+            )
+        
+        return CodeResponse(
+            result=result,
+            task="code_review",
+            model=request.model or openai_manager.code_models["code_review"],
+            language=request.language
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error reviewing code: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error reviewing code: {str(e)}"
+        )
+
+@app.post("/ai/code/chat", response_model=CodeResponse)
+async def chat_about_code(request: CodeChatRequest):
+    """Chat about code using OpenAI"""
+    if not openai_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="OpenAI service not available"
+        )
+    
+    try:
+        result = openai_manager.chat_about_code(
+            message=request.message,
+            conversation_history=request.conversation_history,
+            model=request.model
+        )
+        
+        if not result:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to process chat"
+            )
+        
+        return CodeResponse(
+            result=result,
+            task="code_chat",
+            model=request.model or openai_manager.code_models["chat"],
+            language="text"  # Chat is language-agnostic
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error processing code chat: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error processing code chat: {str(e)}"
+        )
+
 @app.get("/info")
 async def get_info():
     """Get application information"""
@@ -267,6 +524,12 @@ async def get_info():
         "description": "AI-Powered Healthcare Solutions",
         "features": [
             "OpenAI Integration",
+            "OpenAI Codex Chat GPT",
+            "Code Generation",
+            "Code Explanation",
+            "Code Completion",
+            "Code Review",
+            "Code Chat",
             "Hugging Face Models",
             "Docker Containerization",
             "Heroku Deployment",
@@ -279,6 +542,11 @@ async def get_info():
             "docs": "/docs",
             "ai_process": "/ai/process",
             "ai_models": "/ai/models",
+            "code_generate": "/ai/code/generate",
+            "code_explain": "/ai/code/explain",
+            "code_complete": "/ai/code/complete",
+            "code_review": "/ai/code/review",
+            "code_chat": "/ai/code/chat",
             "info": "/info"
         }
     }
