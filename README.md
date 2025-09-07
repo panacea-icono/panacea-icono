@@ -32,6 +32,32 @@
 
 ---
 
+## 🌍 Gestión del Ecosistema
+
+Este repositorio incluye herramientas avanzadas para gestionar todo el ecosistema panacea-icono:
+
+- 📊 **Gestión de Repositorios**: Lista, analiza y gestiona todos los repositorios
+- 🐛 **Gestión de Issues**: Crea y gestiona issues en todos los repos
+- 📦 **Auditoría de Paquetes**: Escanea vulnerabilidades y dependencias
+- 🔄 **Sincronización Automática**: Mantiene todo actualizado
+- 📝 **README Automático**: Actualiza automáticamente con datos en vivo
+
+### Uso Rápido
+```bash
+# Mostrar estado del ecosistema
+./ecosystem_cli.sh status
+
+# Generar reporte completo
+./ecosystem_cli.sh report
+
+# Sincronizar todo el ecosistema  
+./ecosystem_cli.sh sync
+```
+
+Ver documentación completa en [ECOSYSTEM.md](ECOSYSTEM.md)
+
+---
+
 ## 📋 Lista de Repositorios
 
 
@@ -1149,6 +1175,30 @@ Para contribuir a cualquiera de estos repositorios:
 
 ## Automatización
 
-- Releases coordinados, sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram.
-- Para cambios: ver scripts en el hub (orchestrators, audits, sync).
+### 🤖 Gestión Automática del Ecosistema
+
+- **Sincronización Completa**: `./ecosystem_cli.sh sync` - Sincroniza todos los repositorios
+- **Reportes Automáticos**: Generación diaria/semanal de reportes del ecosistema
+- **Auditorías de Seguridad**: Escaneo automático de vulnerabilidades
+- **Actualización de README**: Mantiene la documentación sincronizada con datos reales
+- **Gestión de Issues**: Creación y seguimiento automático de tareas
+- **Monitoreo de Paquetes**: Detección de dependencias obsoletas
+
+### 🛠️ Scripts de Automatización
+
+- `sync_ecosystem.sh` - Script principal de sincronización (mejorado)
+- `ecosystem_cli.sh` - Interfaz de línea de comandos
+- `ecosystem_manager.py` - Gestor central del ecosistema
+- Scripts del hub Ton-telegram para orquestación avanzada
+
+### 🔄 Operaciones Disponibles
+
+```bash
+# Comandos principales
+./ecosystem_cli.sh status    # Estado del ecosistema
+./ecosystem_cli.sh sync      # Sincronización completa
+./ecosystem_cli.sh report    # Generar reporte
+./ecosystem_cli.sh audit     # Auditoría de seguridad
+./ecosystem_cli.sh readme    # Actualizar README
+```
 
