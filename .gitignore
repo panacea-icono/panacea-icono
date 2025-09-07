@@ -89,6 +89,10 @@ docker-compose.override.yml
 *.generated.*
 .env.generated
 
+# Deployment temporary files
+/tmp/deployment-info.md
+bandit-report.json
+
 # Secrets and tokens
 HEROKU_API_KEY=*
 GITHUB_TOKEN=*

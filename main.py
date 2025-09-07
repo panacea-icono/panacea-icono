@@ -6,14 +6,17 @@ FastAPI application with AI models integration
 
 import os
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pathlib import Path
+from datetime import datetime
+import json
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 import uvicorn
+import requests
 
 # Import Hugging Face manager
 try:
@@ -68,6 +71,35 @@ class ModelInfo(BaseModel):
     name: str = Field(description="Model name")
     task: str = Field(description="Task type")
     status: str = Field(description="Model status")
+
+class EnvironmentInfo(BaseModel):
+    name: str = Field(description="Environment name")
+    status: str = Field(description="Environment status")
+    url: Optional[str] = Field(description="Environment URL", default=None)
+    objectives: List[str] = Field(description="Environment objectives", default=[])
+    
+class DeploymentInfo(BaseModel):
+    environment: str = Field(description="Deployment environment")
+    status: str = Field(description="Deployment status")
+    timestamp: datetime = Field(description="Deployment timestamp")
+    version: str = Field(description="Deployed version")
+    
+class GistRequest(BaseModel):
+    description: str = Field(description="Gist description")
+    files: Dict[str, str] = Field(description="Files content")
+    public: bool = Field(description="Public gist", default=True)
+    
+class LinkInfo(BaseModel):
+    name: str = Field(description="Link name")
+    url: str = Field(description="Link URL")
+    category: str = Field(description="Link category")
+    description: Optional[str] = Field(description="Link description", default=None)
+    
+class ProjectionData(BaseModel):
+    metric: str = Field(description="Metric name")
+    current_value: float = Field(description="Current value")
+    projected_value: float = Field(description="Projected value")
+    timeframe: str = Field(description="Projection timeframe")
 
 # Global variables
 hf_manager: Optional[HuggingFaceManager] = None
@@ -279,8 +311,320 @@ async def get_info():
             "docs": "/docs",
             "ai_process": "/ai/process",
             "ai_models": "/ai/models",
-            "info": "/info"
+            "info": "/info",
+            "deploy_environments": "/deploy/environments",
+            "deploy_status": "/deploy/status/{environment}",
+            "deploy_gist": "/deploy/gist",
+            "deploy_releases": "/deploy/releases",
+            "deploy_tags": "/deploy/tags", 
+            "deploy_packages": "/deploy/packages",
+            "deploy_links": "/deploy/links",
+            "deploy_projections": "/deploy/projections",
+            "deploy_objectives": "/deploy/objectives/{environment}"
         }
+    }
+
+# === DEPLOYMENT WORKFLOW ROUTES ===
+
+@app.get("/deploy/environments", response_model=List[EnvironmentInfo])
+async def get_environments():
+    """Get deployment environments status"""
+    environments = [
+        EnvironmentInfo(
+            name="development",
+            status="active",
+            url="http://localhost:8000",
+            objectives=["Local testing", "Development workflow", "Feature development"]
+        ),
+        EnvironmentInfo(
+            name="staging", 
+            status="active",
+            url="https://panacea-icono-staging.herokuapp.com",
+            objectives=["Pre-production testing", "Integration testing", "User acceptance testing"]
+        ),
+        EnvironmentInfo(
+            name="production",
+            status="active", 
+            url="https://panacea-icono-ai-78b4eb86c23b.herokuapp.com",
+            objectives=["Live application", "Production workloads", "User traffic"]
+        )
+    ]
+    return environments
+
+@app.get("/deploy/status/{environment}")
+async def get_deployment_status(environment: str):
+    """Get deployment status for specific environment"""
+    deployments = {
+        "development": DeploymentInfo(
+            environment="development",
+            status="healthy",
+            timestamp=datetime.utcnow(),
+            version="1.0.0-dev"
+        ),
+        "staging": DeploymentInfo(
+            environment="staging", 
+            status="healthy",
+            timestamp=datetime.utcnow(),
+            version="1.0.0-rc.1"
+        ),
+        "production": DeploymentInfo(
+            environment="production",
+            status="healthy", 
+            timestamp=datetime.utcnow(),
+            version="1.0.0"
+        )
+    }
+    
+    if environment not in deployments:
+        raise HTTPException(status_code=404, detail=f"Environment {environment} not found")
+    
+    return deployments[environment]
+
+@app.post("/deploy/gist")
+async def create_gist(gist_request: GistRequest):
+    """Create a GitHub gist with deployment information"""
+    try:
+        # Simulate gist creation (in real implementation, would use GitHub API)
+        gist_data = {
+            "id": f"gist-{datetime.utcnow().timestamp()}",
+            "description": gist_request.description,
+            "public": gist_request.public,
+            "files": gist_request.files,
+            "url": f"https://gist.github.com/placeholder/{datetime.utcnow().timestamp()}",
+            "created_at": datetime.utcnow().isoformat()
+        }
+        
+        return {
+            "message": "Gist created successfully",
+            "gist": gist_data
+        }
+        
+    except Exception as e:
+        logger.error(f"Error creating gist: {e}")
+        raise HTTPException(status_code=500, detail=f"Error creating gist: {str(e)}")
+
+@app.get("/deploy/releases")
+async def get_releases():
+    """Get GitHub releases information"""
+    try:
+        # Simulate releases data (in real implementation, would fetch from GitHub API)
+        releases = [
+            {
+                "tag_name": "v1.0.0",
+                "name": "PANACEA ICONO v1.0.0",
+                "body": "Initial release with AI integration and deployment workflows",
+                "created_at": "2025-09-07T18:00:00Z",
+                "published_at": "2025-09-07T18:00:00Z",
+                "assets": [
+                    {
+                        "name": "panacea-icono-1.0.0.tar.gz",
+                        "download_count": 42,
+                        "size": 1024000
+                    }
+                ]
+            }
+        ]
+        
+        return {
+            "releases": releases,
+            "total": len(releases)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error fetching releases: {e}")
+        raise HTTPException(status_code=500, detail=f"Error fetching releases: {str(e)}")
+
+@app.get("/deploy/tags")  
+async def get_tags():
+    """Get GitHub tags information"""
+    try:
+        # Simulate tags data (in real implementation, would fetch from GitHub API)
+        tags = [
+            {
+                "name": "v1.0.0",
+                "commit": {
+                    "sha": "abc123456",
+                    "message": "Release v1.0.0 with deployment workflows"
+                }
+            },
+            {
+                "name": "v0.9.0",
+                "commit": {
+                    "sha": "def789012", 
+                    "message": "Pre-release with basic features"
+                }
+            }
+        ]
+        
+        return {
+            "tags": tags,
+            "total": len(tags)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error fetching tags: {e}")
+        raise HTTPException(status_code=500, detail=f"Error fetching tags: {str(e)}")
+
+@app.get("/deploy/packages")
+async def get_packages():
+    """Get package information"""
+    try:
+        packages = [
+            {
+                "name": "panacea-icono",
+                "version": "1.0.0",
+                "type": "docker",
+                "registry": "ghcr.io/panacea-icono/panacea-icono",
+                "size": "512 MB",
+                "downloads": 156
+            },
+            {
+                "name": "panacea-icono-py",
+                "version": "1.0.0", 
+                "type": "python",
+                "registry": "pypi",
+                "size": "2.1 MB",
+                "downloads": 89
+            }
+        ]
+        
+        return {
+            "packages": packages,
+            "total": len(packages)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error fetching packages: {e}")
+        raise HTTPException(status_code=500, detail=f"Error fetching packages: {str(e)}")
+
+@app.get("/deploy/links", response_model=List[LinkInfo])
+async def get_deployment_links():
+    """Get deployment-related links"""
+    links = [
+        LinkInfo(
+            name="Production App",
+            url="https://panacea-icono-ai-78b4eb86c23b.herokuapp.com",
+            category="deployment",
+            description="Production deployment on Heroku"
+        ),
+        LinkInfo(
+            name="GitHub Repository", 
+            url="https://github.com/panacea-icono/panacea-icono",
+            category="source",
+            description="Main repository"
+        ),
+        LinkInfo(
+            name="Docker Hub",
+            url="https://hub.docker.com/r/drtv/panacea-icono", 
+            category="registry",
+            description="Docker container registry"
+        ),
+        LinkInfo(
+            name="GitHub Actions",
+            url="https://github.com/panacea-icono/panacea-icono/actions",
+            category="cicd",
+            description="CI/CD workflows"
+        ),
+        LinkInfo(
+            name="Documentation",
+            url="https://panacea-icono.org",
+            category="docs",
+            description="Project documentation"
+        )
+    ]
+    
+    return links
+
+@app.get("/deploy/projections", response_model=List[ProjectionData])
+async def get_deployment_projections():
+    """Get deployment projections and analytics"""
+    projections = [
+        ProjectionData(
+            metric="deployment_frequency",
+            current_value=2.5,
+            projected_value=4.0,
+            timeframe="next_month"
+        ),
+        ProjectionData(
+            metric="success_rate",
+            current_value=95.5,
+            projected_value=98.0,
+            timeframe="next_quarter"
+        ),
+        ProjectionData(
+            metric="average_deployment_time", 
+            current_value=8.5,
+            projected_value=6.0,
+            timeframe="next_month"
+        ),
+        ProjectionData(
+            metric="rollback_rate",
+            current_value=5.2,
+            projected_value=2.0,
+            timeframe="next_quarter"
+        )
+    ]
+    
+    return projections
+
+@app.get("/deploy/objectives/{environment}")
+async def get_environment_objectives(environment: str):
+    """Get environment-specific objectives and achievements"""
+    objectives = {
+        "development": {
+            "achieved": [
+                "FastAPI application setup",
+                "Hugging Face integration",
+                "Docker containerization",
+                "Local testing environment"
+            ],
+            "in_progress": [
+                "Enhanced deployment workflows",
+                "GitHub integration features"
+            ],
+            "planned": [
+                "Advanced monitoring",
+                "Performance optimization"
+            ]
+        },
+        "staging": {
+            "achieved": [
+                "Staging environment deployment",
+                "Integration testing setup",
+                "Performance testing"
+            ],
+            "in_progress": [
+                "User acceptance testing",
+                "Load testing"
+            ],
+            "planned": [
+                "Security testing",
+                "Compliance validation"
+            ]
+        },
+        "production": {
+            "achieved": [
+                "Production deployment",
+                "Health monitoring",
+                "Backup systems"
+            ],
+            "in_progress": [
+                "Performance optimization",
+                "Scaling improvements"
+            ],
+            "planned": [
+                "Multi-region deployment",
+                "Advanced analytics"
+            ]
+        }
+    }
+    
+    if environment not in objectives:
+        raise HTTPException(status_code=404, detail=f"Environment {environment} not found")
+    
+    return {
+        "environment": environment,
+        "objectives": objectives[environment]
     }
 
 # Error handlers

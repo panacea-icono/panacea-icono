@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # 🚀 PANACEA ICONO Ecosystem Synchronization Script
-# Sincroniza Docker, Heroku, Hugging Face y GitHub
+# Sincroniza Docker, Heroku, Hugging Face y GitHub con despliegue de workflows
+# Enhanced with deployment workflows, routes, gists, tags, releases, packages, links, projections
 # Developed by: drtv
 
 set -e
@@ -21,12 +22,14 @@ HEROKU_APP_URL="https://panacea-icono-ai-78b4eb86c23b.herokuapp.com"
 GITHUB_REPO="panacea-icono/panacea-icono"
 DOCKER_IMAGE="drtv/panacea-icono"
 DOCKER_USERNAME="drtv"
+ENVIRONMENT="${ENVIRONMENT:-production}"
 
 echo -e "${CYAN}🏥 PANACEA ICONO Ecosystem Synchronization${NC}"
 echo "=================================================="
 echo -e "${BLUE}🐳 Docker User: ${DOCKER_USERNAME}${NC}"
 echo -e "${BLUE}🚀 Heroku App: ${APP_NAME}${NC}"
 echo -e "${BLUE}📚 GitHub Repo: ${GITHUB_REPO}${NC}"
+echo -e "${BLUE}🌍 Environment: ${ENVIRONMENT}${NC}"
 echo ""
 
 # Función para mostrar estado
@@ -259,6 +262,88 @@ sync_github() {
     fi
 }
 
+# Función para validar nuevos endpoints de deployment
+validate_deployment_endpoints() {
+    echo -e "${YELLOW}🔍 Validando nuevos endpoints de deployment...${NC}"
+    
+    local base_url="${HEROKU_APP_URL}"
+    local endpoints=(
+        "health"
+        "deploy/environments"
+        "deploy/status/production"
+        "deploy/links"
+        "deploy/projections"
+        "deploy/objectives/production"
+    )
+    
+    local success_count=0
+    local total_count=${#endpoints[@]}
+    
+    for endpoint in "${endpoints[@]}"; do
+        echo -n "  📡 Probando /${endpoint}... "
+        if curl -s -f "${base_url}/${endpoint}" > /dev/null 2>&1; then
+            echo -e "${GREEN}✅${NC}"
+            ((success_count++))
+        else
+            echo -e "${RED}❌${NC}"
+        fi
+        sleep 1
+    done
+    
+    echo ""
+    echo -e "  📊 Resultado: ${success_count}/${total_count} endpoints funcionando"
+    
+    if [ $success_count -eq $total_count ]; then
+        echo -e "${GREEN}✅ Todos los endpoints de deployment funcionan correctamente${NC}"
+        return 0
+    else
+        echo -e "${YELLOW}⚠️  Algunos endpoints no están funcionando${NC}"
+        return 1
+    fi
+}
+
+# Función para crear gist de deployment
+create_deployment_gist() {
+    echo -e "${YELLOW}📝 Creando gist de información de deployment...${NC}"
+    
+    # Crear contenido del gist
+    local gist_content="# 🚀 PANACEA ICONO Deployment Info
+
+## 📊 Environment Status
+- Environment: ${ENVIRONMENT}
+- Heroku URL: ${HEROKU_APP_URL}
+- Docker Image: ${DOCKER_IMAGE}
+- GitHub Repo: ${GITHUB_REPO}
+
+## 🔗 Deployment Links
+- Production: ${HEROKU_APP_URL}
+- Health Check: ${HEROKU_APP_URL}/health
+- API Docs: ${HEROKU_APP_URL}/docs
+- Environments: ${HEROKU_APP_URL}/deploy/environments
+- Status: ${HEROKU_APP_URL}/deploy/status/production
+
+## 📈 Key Metrics
+- Last deployment: $(date)
+- Deployment method: Heroku + Docker
+- CI/CD: GitHub Actions
+
+## 🎯 Objectives Achieved
+- ✅ Multi-environment deployment workflows
+- ✅ GitHub integration endpoints
+- ✅ Environment objective tracking
+- ✅ Package management
+- ✅ Link management system
+- ✅ Projection analytics
+"
+
+    echo "$gist_content" > /tmp/deployment-info.md
+    echo -e "${GREEN}✅ Gist content created at /tmp/deployment-info.md${NC}"
+    
+    # En un entorno real, aquí se haría el push a GitHub Gists
+    echo -e "${BLUE}💡 Para crear el gist en GitHub, ejecuta:${NC}"
+    echo "gh gist create /tmp/deployment-info.md --desc 'PANACEA ICONO Deployment Info' --public"
+}
+
 # Función para mostrar resumen
 show_summary() {
     echo ""
@@ -374,11 +459,21 @@ main() {
         fi
     fi
     
+    # Validar nuevos endpoints de deployment
+    echo ""
+    echo -e "${PURPLE}🔍 Validando deployment workflows...${NC}"
+    validate_deployment_endpoints
+    
+    # Crear gist de deployment
+    echo ""
+    create_deployment_gist
+    
     echo ""
     show_summary
     
     echo -e "${CYAN}🎉 Sincronización del ecosistema completada!${NC}"
     echo -e "${BLUE}🐳 Docker Hub: https://hub.docker.com/r/${DOCKER_USERNAME}${NC}"
+    echo -e "${PURPLE}📝 Deployment Gist: /tmp/deployment-info.md${NC}"
 }
 
 # Ejecutar función principal
