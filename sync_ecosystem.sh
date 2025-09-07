@@ -230,9 +230,47 @@ sync_huggingface() {
     fi
 }
 
+# Función para actualizar ecosistema
+update_ecosystem_data() {
+    echo -e "${YELLOW}📊 Actualizando datos del ecosistema...${NC}"
+    
+    # Ejecutar tracker de ecosistema
+    if python3 ecosystem_tracker.py; then
+        echo -e "${GREEN}✅ Datos del ecosistema actualizados${NC}"
+    else
+        echo -e "${RED}❌ Error al actualizar datos del ecosistema${NC}"
+        return 1
+    fi
+    
+    # Generar README mejorado si existe el archivo
+    if [ -f "readme_generator.py" ]; then
+        echo -e "${YELLOW}📄 Generando README mejorado...${NC}"
+        if python3 readme_generator.py; then
+            echo -e "${GREEN}✅ README mejorado generado${NC}"
+            
+            # Reemplazar README original con la versión mejorada
+            if [ -f "README_enhanced.md" ]; then
+                cp README_enhanced.md README.md
+                echo -e "${GREEN}✅ README actualizado con información del ecosistema${NC}"
+            fi
+        else
+            echo -e "${RED}❌ Error al generar README mejorado${NC}"
+            return 1
+        fi
+    fi
+    
+    return 0
+}
+
 # Función para sincronizar con GitHub
 sync_github() {
     echo -e "${YELLOW}📚 Sincronizando con GitHub...${NC}"
+    
+    # Actualizar datos del ecosistema primero
+    if ! update_ecosystem_data; then
+        echo -e "${RED}❌ Error al actualizar datos del ecosistema${NC}"
+        return 1
+    fi
     
     # Verificar cambios
     if git status --porcelain | grep -q .; then
@@ -240,7 +278,11 @@ sync_github() {
         
         git add .
         git commit -m "🔄 Sync: Actualización automática del ecosistema
-        
+
+        - 📊 Datos del ecosistema actualizados
+        - 🍴 Información de forks actualizada
+        - 🎯 Feed de actividad reciente
+        - 📚 Estadísticas mejoradas
         - 🐳 Docker build y test (drtv)
         - 🚀 Heroku deployment
         - 🤖 Hugging Face integration
