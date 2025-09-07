@@ -1,0 +1,221 @@
+{
+  "audit_info": {
+    "timestamp": "2025-09-07T18:45:01.654530",
+    "duration_seconds": 0.44,
+    "repository_path": "/home/runner/work/panacea-icono/panacea-icono",
+    "auditor_version": "1.0.0"
+  },
+  "summary": {
+    "total_tests": 13,
+    "passed": 12,
+    "failed": 0,
+    "warnings": 0,
+    "info": 1,
+    "overall_score": 0.92
+  },
+  "categories": {
+    "SECURITY": [
+      {
+        "category": "SECURITY",
+        "test_name": "Exposed Secrets",
+        "status": "PASS",
+        "message": "No exposed secrets detected in source code",
+        "details": null,
+        "recommendation": null
+      },
+      {
+        "category": "SECURITY",
+        "test_name": "Environment Variables",
+        "status": "PASS",
+        "message": "Environment template found (env.example) with 19 variables",
+        "details": {
+          "variables": [
+            "OPENAI_API_KEY",
+            "OPENAI_ORGANIZATION",
+            "HUGGINGFACE_API_KEY",
+            "HUGGINGFACE_EMAIL",
+            "HEROKU_API_KEY",
+            "HEROKU_APP_NAME",
+            "PRODUCTION_URL",
+            "STAGING_URL",
+            "GITHUB_TOKEN",
+            "GITHUB_EMAIL",
+            "GITHUB_USERNAME",
+            "GITHUB_REPO",
+            "DATABASE_URL",
+            "JWT_SECRET_KEY",
+            "ENCRYPTION_KEY",
+            "PAYMENT_SERVICE_URL",
+            "NOTIFICATION_SERVICE_URL",
+            "LOG_LEVEL",
+            "ENVIRONMENT"
+          ],
+          "file": "env.example"
+        },
+        "recommendation": null
+      },
+      {
+        "category": "SECURITY",
+        "test_name": "Docker Configuration",
+        "status": "PASS",
+        "message": "Docker security checks: 4/4 passed",
+        "details": {
+          "checks": {
+            "Non-root user": true,
+            "Health check": true,
+            "Multi-stage build": true,
+            "No root execution": true
+          }
+        },
+        "recommendation": null
+      },
+      {
+        "category": "SECURITY",
+        "test_name": "Dependency Vulnerabilities",
+        "status": "INFO",
+        "message": "Found 94 installed packages",
+        "details": {
+          "package_count": 94
+        },
+        "recommendation": null
+      },
+      {
+        "category": "SECURITY",
+        "test_name": "API Security",
+        "status": "PASS",
+        "message": "API security features: 4/4 implemented",
+        "details": {
+          "features": {
+            "CORS configured": true,
+            "Exception handling": true,
+            "Request validation": true,
+            "Health endpoint": true
+          }
+        },
+        "recommendation": null
+      }
+    ],
+    "CODE_QUALITY": [
+      {
+        "category": "CODE_QUALITY",
+        "test_name": "Code Formatting",
+        "status": "PASS",
+        "message": "Formatting tools configured: 2/2",
+        "details": {
+          "python_files": 3,
+          "black_configured": true,
+          "isort_configured": true
+        },
+        "recommendation": null
+      },
+      {
+        "category": "CODE_QUALITY",
+        "test_name": "Documentation",
+        "status": "PASS",
+        "message": "Documentation files: 6/6 present",
+        "details": {
+          "files": {
+            "README.md": true,
+            "requirements.txt": true,
+            "pyproject.toml": true,
+            "env.example": true,
+            "Dockerfile": true
+          },
+          "readme_substantial": true
+        },
+        "recommendation": null
+      },
+      {
+        "category": "CODE_QUALITY",
+        "test_name": "Project Structure",
+        "status": "PASS",
+        "message": "Project structure score: 6/7",
+        "details": {
+          "required_files": {
+            "main.py": true,
+            "requirements.txt": true,
+            "Dockerfile": true,
+            ".gitignore": true
+          },
+          "has_tests": false,
+          "has_config": true,
+          "has_ci_cd": true
+        },
+        "recommendation": null
+      },
+      {
+        "category": "CODE_QUALITY",
+        "test_name": "Type Hints",
+        "status": "PASS",
+        "message": "Type annotation coverage: 210.0%",
+        "details": {
+          "type_hints": 21,
+          "functions": 10,
+          "coverage": 2.1
+        },
+        "recommendation": null
+      }
+    ],
+    "INFRASTRUCTURE": [
+      {
+        "category": "INFRASTRUCTURE",
+        "test_name": "Docker Setup",
+        "status": "PASS",
+        "message": "Docker files: 3/3, Services: 51",
+        "details": {
+          "files": {
+            "Dockerfile": true,
+            "docker-compose.yml": true,
+            ".dockerignore": true
+          },
+          "services_count": 51
+        },
+        "recommendation": null
+      },
+      {
+        "category": "INFRASTRUCTURE",
+        "test_name": "CI/CD Pipeline",
+        "status": "PASS",
+        "message": "Pipeline features: 3/3, Jobs: 69",
+        "details": {
+          "has_quality_checks": true,
+          "has_docker_build": true,
+          "has_deployment": true,
+          "jobs_count": 69
+        },
+        "recommendation": null
+      },
+      {
+        "category": "INFRASTRUCTURE",
+        "test_name": "Deployment Config",
+        "status": "PASS",
+        "message": "Deployment files: 4/4",
+        "details": {
+          "files": {
+            "Procfile": true,
+            "runtime.txt": true,
+            "app.json": true
+          },
+          "has_env_example": true
+        },
+        "recommendation": null
+      },
+      {
+        "category": "INFRASTRUCTURE",
+        "test_name": "Health Monitoring",
+        "status": "PASS",
+        "message": "Monitoring features: 4/4",
+        "details": {
+          "features": {
+            "Health endpoint": true,
+            "Logging configured": true,
+            "Exception handling": true,
+            "Structured responses": true
+          }
+        },
+        "recommendation": null
+      }
+    ]
+  },
+  "recommendations": []
+}

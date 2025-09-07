@@ -1,0 +1,53 @@
+{
+  "name": "PANACEA ICONO",
+  "description": "AI-Powered Healthcare Solutions with Docker and Hugging Face Integration",
+  "image": "heroku/python",
+  "repository": "https://github.com/panacea-icono/panacea-icono",
+  "keywords": [
+    "python",
+    "fastapi",
+    "ai",
+    "healthcare",
+    "huggingface",
+    "docker"
+  ],
+  "env": {
+    "OPENAI_API_KEY": {
+      "description": "OpenAI API key for AI services",
+      "required": false
+    },
+    "HUGGINGFACE_API_KEY": {
+      "description": "Hugging Face API key for model access",
+      "required": false
+    },
+    "HUGGINGFACE_EMAIL": {
+      "description": "Hugging Face account email",
+      "required": false
+    },
+    "LOG_LEVEL": {
+      "description": "Application log level",
+      "value": "INFO",
+      "required": false
+    },
+    "ENVIRONMENT": {
+      "description": "Runtime environment",
+      "value": "production",
+      "required": false
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    "heroku-postgresql:mini",
+    "heroku-redis:mini"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
