@@ -8,6 +8,7 @@ import os
 import logging
 from typing import Dict, Any, Optional
 from pathlib import Path
+from datetime import datetime
 
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,6 +23,14 @@ try:
 except ImportError:
     HuggingFaceManager = None
     HF_MANAGER_AVAILABLE = False
+
+# Import GitHub Repository Manager
+try:
+    from github_repo_manager_mcp import GitHubRepoManagerMCP
+    GITHUB_MANAGER_AVAILABLE = True
+except ImportError:
+    GitHubRepoManagerMCP = None
+    GITHUB_MANAGER_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(
@@ -71,11 +80,12 @@ class ModelInfo(BaseModel):
 
 # Global variables
 hf_manager: Optional[HuggingFaceManager] = None
+github_manager: Optional[GitHubRepoManagerMCP] = None
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup"""
-    global hf_manager
+    global hf_manager, github_manager
     
     logger.info("🚀 Starting PANACEA ICONO application...")
     
@@ -87,6 +97,15 @@ async def startup_event():
         except Exception as e:
             logger.error(f"❌ Error initializing Hugging Face manager: {e}")
             hf_manager = None
+    
+    # Initialize GitHub Repository manager
+    if GITHUB_MANAGER_AVAILABLE and GitHubRepoManagerMCP:
+        try:
+            github_manager = GitHubRepoManagerMCP()
+            logger.info("✅ GitHub repository manager initialized")
+        except Exception as e:
+            logger.error(f"❌ Error initializing GitHub manager: {e}")
+            github_manager = None
     
     logger.info("🎉 PANACEA ICONO application started successfully!")
 
@@ -115,6 +134,7 @@ async def health_check():
     services = {
         "app": "healthy",
         "huggingface": "healthy" if hf_manager else "unavailable",
+        "github": "healthy" if github_manager else "unavailable",
         "docker": "healthy",
         "heroku": "healthy"
     }
@@ -268,6 +288,7 @@ async def get_info():
         "features": [
             "OpenAI Integration",
             "Hugging Face Models",
+            "Dynamic Repository Management",
             "Docker Containerization",
             "Heroku Deployment",
             "FastAPI Web Framework",
@@ -279,9 +300,142 @@ async def get_info():
             "docs": "/docs",
             "ai_process": "/ai/process",
             "ai_models": "/ai/models",
+            "repositories": "/api/repositories",
+            "repository_stats": "/api/repositories/statistics",
             "info": "/info"
         }
     }
+
+# === REPOSITORY API ENDPOINTS ===
+
+@app.get("/api/repositories", response_model=Dict[str, Any])
+async def list_repositories(
+    language: Optional[str] = None,
+    min_stars: Optional[int] = None,
+    max_stars: Optional[int] = None,
+    is_archived: Optional[bool] = None,
+    has_topics: Optional[bool] = None,
+    search: Optional[str] = None,
+    force_refresh: bool = False
+):
+    """
+    List repositories with optional filtering
+    
+    Args:
+        language: Filter by programming language
+        min_stars: Minimum number of stars
+        max_stars: Maximum number of stars
+        is_archived: Filter by archived status
+        has_topics: Filter by presence of topics
+        search: Search term for name/description
+        force_refresh: Force refresh from GitHub API
+    """
+    if not github_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="GitHub repository service not available"
+        )
+    
+    try:
+        # Get all repositories
+        repos = await github_manager.get_repositories(force_refresh=force_refresh)
+        
+        # Apply filters
+        filtered_repos = github_manager.filter_repositories(
+            repositories=repos,
+            language=language,
+            min_stars=min_stars,
+            max_stars=max_stars,
+            is_archived=is_archived,
+            has_topics=has_topics,
+            search_term=search
+        )
+        
+        # Convert to dict format
+        repo_data = []
+        for repo in filtered_repos:
+            repo_dict = repo.to_dict()
+            repo_dict['last_updated_formatted'] = repo.last_updated_formatted
+            repo_dict['topics_str'] = repo.topics_str
+            repo_data.append(repo_dict)
+        
+        return {
+            "repositories": repo_data,
+            "total_count": len(repo_data),
+            "filters_applied": {
+                "language": language,
+                "min_stars": min_stars,
+                "max_stars": max_stars,
+                "is_archived": is_archived,
+                "has_topics": has_topics,
+                "search": search
+            },
+            "last_updated": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error listing repositories: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error listing repositories: {str(e)}"
+        )
+
+@app.get("/api/repositories/statistics")
+async def get_repository_statistics(force_refresh: bool = False):
+    """Get statistics about all repositories"""
+    if not github_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="GitHub repository service not available"
+        )
+    
+    try:
+        repos = await github_manager.get_repositories(force_refresh=force_refresh)
+        stats = github_manager.get_statistics(repos)
+        
+        # Add timestamp
+        stats['generated_at'] = datetime.utcnow().isoformat()
+        
+        return stats
+        
+    except Exception as e:
+        logger.error(f"Error getting repository statistics: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error getting statistics: {str(e)}"
+        )
+
+@app.get("/api/repositories/{repo_name}")
+async def get_repository(repo_name: str):
+    """Get detailed information about a specific repository"""
+    if not github_manager:
+        raise HTTPException(
+            status_code=503,
+            detail="GitHub repository service not available"
+        )
+    
+    try:
+        repo = await github_manager.get_repository(repo_name)
+        if not repo:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Repository '{repo_name}' not found"
+            )
+        
+        repo_dict = repo.to_dict()
+        repo_dict['last_updated_formatted'] = repo.last_updated_formatted
+        repo_dict['topics_str'] = repo.topics_str
+        
+        return repo_dict
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting repository {repo_name}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error getting repository: {str(e)}"
+        )
 
 # Error handlers
 @app.exception_handler(Exception)
