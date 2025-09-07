@@ -1,0 +1,56 @@
+{
+  "github_org": "panacea-icono",
+  "github_token": null,
+  "default_labels": [
+    "enhancement",
+    "ecosystem", 
+    "automation",
+    "panacea-icono"
+  ],
+  "audit_enabled": true,
+  "auto_update_readme": true,
+  "auto_commit": true,
+  "repositories": {
+    "priority_repos": [
+      "Ton-telegram",
+      "panacea-icono",
+      "dr_tv_GPT",
+      "panas_token"
+    ],
+    "excluded_repos": []
+  },
+  "notifications": {
+    "enabled": true,
+    "channels": {
+      "email": "repositorios.panacea@gmail.com",
+      "webhook": null
+    }
+  },
+  "automation": {
+    "daily_reports": true,
+    "weekly_audits": true,
+    "auto_readme_update": true,
+    "auto_package_updates": false,
+    "security_alerts": true
+  },
+  "integrations": {
+    "huggingface": {
+      "enabled": true,
+      "sync_models": true
+    },
+    "docker": {
+      "enabled": true,
+      "auto_build": false
+    },
+    "heroku": {
+      "enabled": true,
+      "auto_deploy": false
+    }
+  },
+  "settings": {
+    "max_concurrent_operations": 5,
+    "timeout_seconds": 300,
+    "retry_attempts": 3,
+    "log_level": "INFO"
+  }
+}
