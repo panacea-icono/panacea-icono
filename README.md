@@ -11,12 +11,31 @@
 
 > Hub general del ecosistema. Este repositorio sirve como README maestro con enlaces, estado y documentación.
 
-- Empresa: Panacea Icono S.A.
-- Dominio: https://panacea-icono.org
-- Hub técnico: https://github.com/panacea-icono/Ton-telegram
-- Canal oficial: https://t.me/drtapiavargas_of
-- Sitio del CEO: https://drtapiavargas.com
-- Contacto: repositorios.panacea@gmail.com · +591 69674560
+## 🏥 Información Corporativa
+- **Empresa**: Panacea Icono S.A.
+- **RUC**: 1234567890123
+- **Dirección**: Av. Principal #123, Santa Cruz de la Sierra, Bolivia
+- **Especialidad**: Medicina Estética, Cirugía Plástica, Tecnología Médica
+- **Servicios**: Consultas médicas, Cirugías estéticas, Tratamientos con IA, Blockchain médico
+- **Horario**: Lunes a Viernes 8:00-18:00, Sábados 8:00-12:00
+
+## 🌐 Enlaces Principales
+- **Dominio**: https://panacea-icono.org
+- **Hub técnico**: https://github.com/panacea-icono/Ton-telegram
+- **Canal oficial**: https://t.me/drtapiavargas_of
+- **Sitio del CEO**: https://drtapiavargas.com
+
+## 📞 Contacto
+- **Email Principal**: repositorios.panacea@gmail.com
+- **Email Técnico**: dev@panacea-icono.org
+- **Email Médico**: citas@panacea-icono.org
+- **Email Administración**: admin@panacea-icono.org
+- **Email Contabilidad**: contabilidad@panacea-icono.org
+- **Email Legal**: legal@panacea-icono.org
+- **Email RRHH**: rrhh@panacea-icono.org
+- **Teléfono**: +591 69674560
+- **WhatsApp**: +591 69674560
+- **Emergencias**: emergencias@panacea-icono.org
 
 ## 🚀 Quickstart
 

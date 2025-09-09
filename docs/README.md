@@ -2,7 +2,11 @@
 
 **Fecha**: 2025-09-09
 **Versión**: v2025.09.09.0302
-**Empresa**: Panacea Icono S.A. · **Dominio**: https://panacea-icono.org · **Contacto**: repositorios.panacea@gmail.com · +591 69674560
+**Empresa**: Panacea Icono S.A. · **RUC**: 1234567890123 · **Dirección**: Av. Principal #123, Santa Cruz de la Sierra, Bolivia
+
+**Dominio**: https://panacea-icono.org · **Especialidad**: Medicina Estética, Cirugía Plástica, Tecnología Médica
+
+**Contacto**: repositorios.panacea@gmail.com · +591 69674560 · **Horario**: Lunes a Viernes 8:00-18:00
 
 ## 🎯 INTRODUCCIÓN
 

@@ -40,10 +40,19 @@ logger = logging.getLogger(__name__)
 # Initialize FastAPI app
 app = FastAPI(
     title="🏥 PANACEA ICONO S.A. - ECOSYSTEM HUB",
-    description="Hub central del ecosistema Panacea Icono con integración completa",
+    description="Hub central del ecosistema Panacea Icono S.A. - Medicina Estética, Cirugía Plástica, IA y Web3",
     version="2.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    contact={
+        "name": "Panacea Icono S.A.",
+        "url": "https://panacea-icono.org",
+        "email": "repositorios.panacea@gmail.com",
+    },
+    license_info={
+        "name": "Proprietary",
+        "url": "https://panacea-icono.org/legal",
+    }
 )
 
 # Add CORS middleware
@@ -158,6 +167,9 @@ async def root():
         <div class="container">
             <h1>🏥 PANACEA ICONO S.A.</h1>
             <h2>Ecosystem Hub - Centro de Control del Ecosistema</h2>
+            <p><strong>📍 Ubicación:</strong> Santa Cruz de la Sierra, Bolivia</p>
+            <p><strong>📞 Contacto:</strong> +591 69674560 | repositorios.panacea@gmail.com</p>
+            <p><strong>🏥 Especialidad:</strong> Medicina Estética, Cirugía Plástica, IA y Web3</p>
             
             <div class="modules">
                 <div class="module">

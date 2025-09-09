@@ -1,7 +1,10 @@
 # Scripts Panacea Icono S.A. — Hostinger + WordPress
 
 ## Rutas locales y remotas
-- Empresa: Panacea Icono S.A. · Dominio: https://panacea-icono.org · Contacto: repositorios.panacea@gmail.com · +591 69674560
+- **Empresa**: Panacea Icono S.A. · **RUC**: 1234567890123
+- **Dirección**: Av. Principal #123, Santa Cruz de la Sierra, Bolivia
+- **Especialidad**: Medicina Estética, Cirugía Plástica, Tecnología Médica
+- **Dominio**: https://panacea-icono.org · **Contacto**: repositorios.panacea@gmail.com · +591 69674560
 - Local (este repo): /Users/kuchimac/Desktop/panacea-icono
 - WordPress local opcional: /Users/kuchimac/Desktop/panacea-icono/public_html
 - Remoto Hostinger (docroot): /home/u485132360/public_html

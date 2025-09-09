@@ -1,68 +1,279 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Panacea Icono S.A. — Landing Ejecutiva</title>
-    <meta name="description" content="Hub ejecutivo del ecosistema Panacea Icono S.A." />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panacea Icono S.A. — Hub Ejecutivo</title>
+    <meta name="description" content="Hub ejecutivo del ecosistema Panacea Icono S.A. - Medicina, IA y Web3 en Santa Cruz de la Sierra, Bolivia">
+    <meta name="keywords" content="Panacea Icono, medicina, IA, Web3, blockchain, Santa Cruz, Bolivia, smart contracts">
+    <meta name="author" content="Panacea Icono S.A.">
     <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 0; color: #0f172a; background: #f8fafc; }
-      header { background: linear-gradient(135deg, #0ea5e9, #3b82f6); color: white; padding: 48px 16px; }
-      .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
-      h1 { margin: 0 0 8px; font-size: 32px; }
-      p.lead { margin: 0; opacity: .9; }
-      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
-      .card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
-      .card h3 { margin-top: 0; font-size: 18px; }
-      .links a { display: block; color: #2563eb; text-decoration: none; margin: 8px 0; }
-      footer { color: #475569; padding: 24px 16px; text-align: center; }
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2d5a87;
+            --accent-color: #e53e3e;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --bg-primary: #f7fafc;
+            --bg-secondary: #ffffff;
+            --border-color: #e2e8f0;
+        }
+        body { 
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; padding: 0; 
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #e6fffa 100%); 
+            color: var(--text-primary); 
+            line-height: 1.6; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 40px auto; 
+            padding: 40px; 
+            background: var(--bg-secondary); 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            border: 1px solid var(--border-color);
+        }
+        header { 
+            text-align: center; 
+            padding-bottom: 30px; 
+            border-bottom: 3px solid var(--primary-color); 
+            margin-bottom: 40px; 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            margin: -40px -40px 40px -40px;
+            padding: 40px;
+            border-radius: 16px 16px 0 0;
+        }
+        header h1 { 
+            color: white; 
+            font-size: 3em; 
+            margin: 0; 
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        header p { 
+            color: rgba(255,255,255,0.9); 
+            font-size: 1.2em; 
+            margin-top: 15px; 
+            font-weight: 300;
+        }
+        .contact-info {
+            background: var(--accent-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+        .location {
+            background: var(--success-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        .section { margin-bottom: 40px; }
+        .section h2 { 
+            color: var(--primary-color); 
+            font-size: 2em; 
+            border-bottom: 3px solid var(--accent-color); 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+            font-weight: 600;
+        }
+        .cards { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+            margin-top: 30px; 
+        }
+        .card { 
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef); 
+            border: 1px solid var(--border-color); 
+            border-radius: 12px; 
+            padding: 25px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .card h3 { 
+            margin-top: 0; 
+            font-size: 1.4em; 
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .links a { 
+            display: block; 
+            color: var(--secondary-color); 
+            text-decoration: none; 
+            margin: 12px 0; 
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .links a:hover { 
+            color: var(--accent-color); 
+            background: var(--bg-primary);
+            transform: translateX(5px);
+        }
+        footer { 
+            text-align: center; 
+            padding-top: 30px; 
+            border-top: 2px solid var(--border-color); 
+            margin-top: 50px; 
+            color: var(--text-secondary); 
+            font-size: 0.95em;
+            background: var(--bg-primary);
+            margin: 50px -40px -40px -40px;
+            padding: 30px 40px;
+            border-radius: 0 0 16px 16px;
+        }
+        .footer-contact {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .footer-contact a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .footer-contact a:hover {
+            color: var(--accent-color);
+            background: var(--bg-secondary);
+        }
+        .company-info {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .company-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+        }
+        .company-info p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
     </style>
-  </head>
-  <body>
-    <header>
-      <div class="container">
-        <h1>Panacea Icono S.A. — Hub Ejecutivo</h1>
-        <p class="lead">Ecosistema médico, IA y Web3. Documentación, resúmenes ejecutivos y enlaces clave.</p>
-        <p class="lead">Contacto: repositorios.panacea@gmail.com · +591 69674560</p>
-      </div>
-    </header>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Panacea Icono S.A. — Hub Ejecutivo</h1>
+            <p class="lead">Ecosistema médico, IA y Web3. Documentación, resúmenes ejecutivos y enlaces clave.</p>
+            <div class="contact-info">
+                📧 repositorios.panacea@gmail.com · 📞 +591 69674560 · 📍 Santa Cruz de la Sierra, Bolivia
+            </div>
+            <div class="location">
+                🏢 Panacea Icono S.A. · RUC: 1234567890123 · Av. Principal #123, Santa Cruz, Bolivia
+            </div>
+        </header>
 
-    <main class="container">
-      <section class="cards">
-        <div class="card">
-          <h3>Resúmenes Ejecutivos</h3>
-          <div class="links">
-            <a href="./../RESUMEN_FINAL_ECOSISTEMA_COMPLETO.md">RESUMEN_FINAL_ECOSISTEMA_COMPLETO.md</a>
-            <a href="./../RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md">RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md</a>
-            <a href="./../RESUMEN_COORDINACION_COMPLETA.md">RESUMEN_COORDINACION_COMPLETA.md</a>
-            <a href="./../RESUMEN_MIGRACION_DOCUMENTACION_COMPLETA.md">RESUMEN_MIGRACION_DOCUMENTACION_COMPLETA.md</a>
-          </div>
+        <div class="company-info">
+            <h3>🏥 Panacea Icono S.A.</h3>
+            <p><strong>Especialidad:</strong> Medicina Estética, Cirugía Plástica, Tecnología Médica</p>
+            <p><strong>Servicios:</strong> Consultas médicas, Cirugías estéticas, Tratamientos con IA, Blockchain médico</p>
+            <p><strong>Horario:</strong> Lunes a Viernes 8:00-18:00, Sábados 8:00-12:00</p>
         </div>
-        <div class="card">
-          <h3>Documentación</h3>
-          <div class="links">
-            <a href="./../docs/README.md">Índice completo de documentación</a>
-            <a href="./../docs/auditorias/github_audit_report.md">Auditoría GitHub</a>
-            <a href="./../docs/auditorias/heroku_audit_report.md">Auditoría Heroku</a>
-            <a href="./../docs/auditorias/telegram_audit_report.md">Auditoría Telegram</a>
-            <a href="./../docs/auditorias/huggingface_audit_report.md">Auditoría Hugging Face</a>
-            <a href="./../docs/auditorias/docker_audit_report.md">Auditoría Docker</a>
-            <a href="./../docs/auditorias/vercel_audit_report.md">Auditoría Vercel</a>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Repositorios Clave</h3>
-          <div class="links">
-            <a href="https://github.com/panacea-icono/panacea-icono" target="_blank" rel="noopener">Landing (este repo)</a>
-            <a href="https://github.com/panacea-icono/panacea_smart_contracts" target="_blank" rel="noopener">Smart Contracts</a>
-            <a href="https://github.com/panacea-icono/Ton-telegram" target="_blank" rel="noopener">Hub Orquestador</a>
-          </div>
-        </div>
-      </section>
-    </main>
 
-    <footer>
-      © 2025 Panacea Icono S.A. | Documentación y coordinación automatizada
-    </footer>
-  </body>
+        <div class="cards">
+            <div class="card">
+                <h3>📊 Resúmenes Ejecutivos</h3>
+                <div class="links">
+                    <a href="./../RESUMEN_FINAL_ECOSISTEMA_COMPLETO.md">RESUMEN_FINAL_ECOSISTEMA_COMPLETO.md</a>
+                    <a href="./../RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md">RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md</a>
+                    <a href="./../RESUMEN_COORDINACION_COMPLETA.md">RESUMEN_COORDINACION_COMPLETA.md</a>
+                    <a href="./../RESUMEN_MIGRACION_DOCUMENTACION_COMPLETA.md">RESUMEN_MIGRACION_DOCUMENTACION_COMPLETA.md</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📚 Documentación Técnica</h3>
+                <div class="links">
+                    <a href="./../docs/README.md">Índice completo de documentación</a>
+                    <a href="./../docs/auditorias/github_audit_report.md">Auditoría GitHub</a>
+                    <a href="./../docs/auditorias/heroku_audit_report.md">Auditoría Heroku</a>
+                    <a href="./../docs/auditorias/telegram_audit_report.md">Auditoría Telegram</a>
+                    <a href="./../docs/auditorias/huggingface_audit_report.md">Auditoría Hugging Face</a>
+                    <a href="./../docs/auditorias/docker_audit_report.md">Auditoría Docker</a>
+                    <a href="./../docs/auditorias/vercel_audit_report.md">Auditoría Vercel</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔗 Repositorios Clave</h3>
+                <div class="links">
+                    <a href="https://github.com/panacea-icono/panacea-icono" target="_blank" rel="noopener">Landing (este repo)</a>
+                    <a href="https://github.com/panacea-icono/panacea_smart_contracts" target="_blank" rel="noopener">Smart Contracts</a>
+                    <a href="https://github.com/panacea-icono/Ton-telegram" target="_blank" rel="noopener">Hub Orquestador</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🌐 Enlaces Rápidos</h3>
+                <div class="links">
+                    <a href="mailto:repositorios.panacea@gmail.com">📧 Email Principal</a>
+                    <a href="mailto:dev@panacea-icono.org">📧 Email Técnico</a>
+                    <a href="tel:+59169674560">📞 Teléfono</a>
+                    <a href="https://wa.me/59169674560">💬 WhatsApp</a>
+                    <a href="https://panacea-icono.org">🌐 Sitio Web</a>
+                    <a href="https://t.me/drtapiavargas_of">📱 Canal Telegram</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🏥 Servicios Médicos</h3>
+                <div class="links">
+                    <a href="mailto:citas@panacea-icono.org">📅 Agendar Cita</a>
+                    <a href="mailto:info@panacea-icono.org">ℹ️ Información General</a>
+                    <a href="mailto:emergencias@panacea-icono.org">🚨 Emergencias</a>
+                    <a href="tel:+59169674560">📞 Línea Directa</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>💼 Información Corporativa</h3>
+                <div class="links">
+                    <a href="mailto:admin@panacea-icono.org">👔 Administración</a>
+                    <a href="mailto:contabilidad@panacea-icono.org">💰 Contabilidad</a>
+                    <a href="mailto:legal@panacea-icono.org">⚖️ Legal</a>
+                    <a href="mailto:rrhh@panacea-icono.org">👥 Recursos Humanos</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Panacea Icono S.A. Todos los derechos reservados.</p>
+            <div class="footer-contact">
+                <a href="mailto:repositorios.panacea@gmail.com">📧 repositorios.panacea@gmail.com</a>
+                <a href="mailto:dev@panacea-icono.org">📧 dev@panacea-icono.org</a>
+                <a href="tel:+59169674560">📞 +591 69674560</a>
+                <a href="https://wa.me/59169674560">💬 WhatsApp</a>
+            </div>
+            <p>📍 Santa Cruz de la Sierra, Bolivia · RUC: 1234567890123</p>
+            <p>🏥 Medicina Estética · Cirugía Plástica · Tecnología Médica · IA · Web3</p>
+        </footer>
+    </div>
+</body>
 </html>
