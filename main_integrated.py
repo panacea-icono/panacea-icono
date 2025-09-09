@@ -23,6 +23,12 @@ from modules.panacea_connector import PanaceaConnector
 from integrations.github_integration import GitHubIntegration
 from integrations.heroku_integration import HerokuIntegration
 
+# Importar sistemas de IA
+from ai.panacea_ai_ecosystem import ai_ecosystem
+from ai.panacea_gpt_system import panacea_gpt_system
+from ai.huggingface_medical_ai import medical_ai
+from bots.telegram_bots_manager import telegram_manager
+
 # Import Hugging Face manager
 try:
     from huggingface_config import HuggingFaceManager
@@ -367,6 +373,96 @@ async def webhook_handler(source: str, request: Request):
 
     logger.info(f"📥 Webhook recibido de {source}: {str(payload)[:500]}")
     return {"status": "received", "source": source, "timestamp": datetime.now().isoformat()}
+
+# ===== ENDPOINTS DE IA Y BOTS =====
+
+@app.get("/ai/ecosystem/status")
+async def get_ai_ecosystem_status():
+    """Obtener estado completo del ecosistema de IA"""
+    try:
+        status = await ai_ecosystem.get_ecosystem_status()
+        return {
+            "status": "success",
+            "data": {
+                "timestamp": status.timestamp,
+                "overall_health": status.overall_health,
+                "total_components": status.total_components,
+                "active_components": status.active_components,
+                "telegram_bots": status.telegram_bots,
+                "gpt_system": status.gpt_system,
+                "medical_ai": status.medical_ai
+            }
+        }
+    except Exception as e:
+        logger.error(f"Error obteniendo estado del ecosistema de IA: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/ai/medical/query")
+async def process_medical_query(query: str, user_id: str = None):
+    """Procesar consulta médica usando el ecosistema de IA"""
+    try:
+        result = await ai_ecosystem.process_medical_query(query, user_id)
+        return {"status": "success", "data": result}
+    except Exception as e:
+        logger.error(f"Error procesando consulta médica: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/ai/gpts")
+async def list_available_gpts():
+    """Listar GPTs disponibles"""
+    try:
+        gpts = panacea_gpt_system.list_available_gpts()
+        return {"status": "success", "data": gpts}
+    except Exception as e:
+        logger.error(f"Error listando GPTs: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/ai/models")
+async def list_medical_models():
+    """Listar modelos de IA médica disponibles"""
+    try:
+        models = medical_ai.list_available_models()
+        return {"status": "success", "data": models}
+    except Exception as e:
+        logger.error(f"Error listando modelos médicos: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/bots/telegram/status")
+async def get_telegram_bots_status():
+    """Obtener estado de todos los bots de Telegram"""
+    try:
+        health_results = await telegram_manager.check_all_bots_health()
+        stats = telegram_manager.get_bot_stats()
+        return {
+            "status": "success",
+            "data": {
+                "health_results": health_results,
+                "stats": stats
+            }
+        }
+    except Exception as e:
+        logger.error(f"Error obteniendo estado de bots de Telegram: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/bots/telegram/send")
+async def send_telegram_message(bot_name: str, chat_id: str, message: str):
+    """Enviar mensaje a través de un bot de Telegram específico"""
+    try:
+        result = await telegram_manager.send_message(bot_name, chat_id, message)
+        return {"status": "success", "data": result}
+    except Exception as e:
+        logger.error(f"Error enviando mensaje de Telegram: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/ai/dashboard")
+async def get_ai_dashboard():
+    """Obtener datos para el dashboard de IA"""
+    try:
+        dashboard_data = ai_ecosystem.get_ecosystem_dashboard_data()
+        return {"status": "success", "data": dashboard_data}
+    except Exception as e:
+        logger.error(f"Error obteniendo datos del dashboard de IA: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Hugging Face models (if available)
 @app.get("/huggingface/models")
