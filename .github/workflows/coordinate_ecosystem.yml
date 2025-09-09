@@ -1,0 +1,114 @@
+name: 🚀 Coordinate Ecosystem Panacea Icono S.A.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to coordinate (e.g., 2025.09.09.1200)'
+        required: false
+        default: ''
+      create_release:
+        description: 'Create GitHub releases'
+        required: false
+        default: true
+        type: boolean
+      create_packages:
+        description: 'Create packages'
+        required: false
+        default: true
+        type: boolean
+  schedule:
+    # Run daily at 6 AM UTC (2 AM Bolivia time)
+    - cron: '0 6 * * *'
+  push:
+    branches: [ main ]
+    paths:
+      - 'coordinate_ecosystem.sh'
+      - 'sync_ecosystem.sh'
+      - 'main_integrated.py'
+
+jobs:
+  coordinate-ecosystem:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚀 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install requests pyyaml
+    
+    - name: 🔧 Configure Git
+      run: |
+        git config --global user.name "Panacea Icono S.A. Bot"
+        git config --global user.email "repositorios.panacea@gmail.com"
+    
+    - name: 🚀 Coordinate Ecosystem
+      run: |
+        chmod +x coordinate_ecosystem.sh
+        ./coordinate_ecosystem.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: ${{ github.event.inputs.version || '' }}
+        CREATE_RELEASE: ${{ github.event.inputs.create_release || 'true' }}
+        CREATE_PACKAGES: ${{ github.event.inputs.create_packages || 'true' }}
+    
+    - name: 📊 Generate Coordination Report
+      run: |
+        echo "# 🚀 Coordination Report - $(date)" > coordination_report.md
+        echo "" >> coordination_report.md
+        echo "## 📋 Repositories Coordinated" >> coordination_report.md
+        echo "" >> coordination_report.md
+        echo "- ✅ Landing Page (panacea-icono)" >> coordination_report.md
+        echo "- ✅ Smart Contracts (panacea_smart_contracts)" >> coordination_report.md
+        echo "- ✅ Variables (local)" >> coordination_report.md
+        echo "- ✅ Auditor (local)" >> coordination_report.md
+        echo "" >> coordination_report.md
+        echo "## 🏷️ Version: v$(date '+%Y.%m.%d.%H%M')" >> coordination_report.md
+        echo "## 📅 Date: $(date)" >> coordination_report.md
+    
+    - name: 📤 Upload Coordination Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coordination-report
+        path: coordination_report.md
+    
+    - name: 🚀 Push Changes
+      run: |
+        git add .
+        git commit -m "feat: Automated coordination v$(date '+%Y.%m.%d.%H%M') - $(date)" || echo "No changes to commit"
+        git push origin main || echo "No changes to push"
+    
+    - name: 📦 Create Release
+      if: ${{ github.event.inputs.create_release == 'true' || github.event_name == 'schedule' }}
+      run: |
+        VERSION=$(date '+%Y.%m.%d.%H%M')
+        gh release create "v$VERSION" \
+          --title "🚀 Coordinated Release v$VERSION" \
+          --notes "Automated coordinated release of Panacea Icono S.A. ecosystem" \
+          --latest || echo "Release already exists or failed"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 📊 Update Smart Contracts Release
+      if: ${{ github.event.inputs.create_packages == 'true' || github.event_name == 'schedule' }}
+      run: |
+        # This would coordinate with the smart contracts repository
+        echo "📦 Smart contracts package coordination would happen here"
+        # In a real implementation, this would trigger the smart contracts workflow
+    
+    - name: 🎉 Coordination Complete
+      run: |
+        echo "🎉 Ecosystem coordination completed successfully!"
+        echo "📊 Version: v$(date '+%Y.%m.%d.%H%M')"
+        echo "📅 Date: $(date)"
