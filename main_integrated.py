@@ -13,7 +13,8 @@ from datetime import datetime
 
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 import uvicorn
 
@@ -63,6 +64,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files
+app.mount("/assets", StaticFiles(directory="public/assets"), name="assets")
 
 # Pydantic models
 class EcosystemStatus(BaseModel):
@@ -146,6 +150,7 @@ async def root():
     <html>
     <head>
         <title>🏥 PANACEA ICONO S.A. - Ecosystem Hub</title>
+        <link rel="icon" type="image/svg+xml" href="/assets/icon-favicon.svg">
         <meta charset="utf-8">
         <style>
             body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
@@ -165,6 +170,9 @@ async def root():
     </head>
     <body>
         <div class="container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="/assets/logo-panacea.svg" alt="Panacea Icono S.A. Logo" style="width: 100px; height: 100px; margin-bottom: 20px;">
+            </div>
             <h1>🏥 PANACEA ICONO S.A.</h1>
             <h2>Ecosystem Hub - Centro de Control del Ecosistema</h2>
             <p><strong>📍 Ubicación:</strong> Santa Cruz de la Sierra, Bolivia</p>

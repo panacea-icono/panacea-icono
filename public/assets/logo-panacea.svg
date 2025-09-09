@@ -1,0 +1,24 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo circular médico -->
+  <circle cx="100" cy="100" r="95" fill="#1a365d" stroke="#2d5a87" stroke-width="4"/>
+  
+  <!-- Símbolo médico central -->
+  <g transform="translate(100, 100)">
+    <!-- Cruz médica -->
+    <rect x="-8" y="-25" width="16" height="50" fill="#ffffff" rx="2"/>
+    <rect x="-25" y="-8" width="50" height="16" fill="#ffffff" rx="2"/>
+    
+    <!-- Círculo de protección -->
+    <circle cx="0" cy="0" r="35" fill="none" stroke="#e53e3e" stroke-width="3"/>
+    
+    <!-- Puntos de conexión -->
+    <circle cx="0" cy="-35" r="4" fill="#38a169"/>
+    <circle cx="35" cy="0" r="4" fill="#38a169"/>
+    <circle cx="0" cy="35" r="4" fill="#38a169"/>
+    <circle cx="-35" cy="0" r="4" fill="#38a169"/>
+  </g>
+  
+  <!-- Texto corporativo -->
+  <text x="100" y="160" text-anchor="middle" fill="#1a365d" font-family="Arial, sans-serif" font-size="16" font-weight="bold">PANACEA</text>
+  <text x="100" y="180" text-anchor="middle" fill="#2d5a87" font-family="Arial, sans-serif" font-size="12">ICONO S.A.</text>
+</svg>

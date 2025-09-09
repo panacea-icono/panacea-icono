@@ -9,6 +9,10 @@
 
 # Panacea Icono S.A. — Ecosistema
 
+<div align="center">
+  <img src="public/assets/logo-medical.svg" alt="Panacea Icono S.A. Logo" width="400" height="200">
+</div>
+
 > Hub general del ecosistema. Este repositorio sirve como README maestro con enlaces, estado y documentación.
 
 ## 🏥 Información Corporativa

@@ -1,0 +1,23 @@
+<svg width="300" height="150" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo médico -->
+  <rect width="300" height="150" fill="#f7fafc"/>
+  
+  <!-- Símbolo médico principal -->
+  <g transform="translate(50, 75)">
+    <!-- Escudo médico -->
+    <path d="M0,-40 L-25,-20 L-25,20 L0,40 L25,20 L25,-20 Z" fill="#1a365d" stroke="#2d5a87" stroke-width="2"/>
+    
+    <!-- Cruz médica en el escudo -->
+    <rect x="-8" y="-15" width="16" height="30" fill="#ffffff" rx="2"/>
+    <rect x="-15" y="-8" width="30" height="16" fill="#ffffff" rx="2"/>
+    
+    <!-- Círculo de protección -->
+    <circle cx="0" cy="0" r="45" fill="none" stroke="#e53e3e" stroke-width="3"/>
+  </g>
+  
+  <!-- Texto corporativo -->
+  <text x="120" y="60" fill="#1a365d" font-family="Arial, sans-serif" font-size="24" font-weight="bold">PANACEA ICONO S.A.</text>
+  <text x="120" y="85" fill="#2d5a87" font-family="Arial, sans-serif" font-size="16">Medicina Estética • Cirugía Plástica</text>
+  <text x="120" y="105" fill="#718096" font-family="Arial, sans-serif" font-size="14">IA • Web3 • Blockchain Médico</text>
+  <text x="120" y="125" fill="#38a169" font-family="Arial, sans-serif" font-size="12">📍 Santa Cruz de la Sierra, Bolivia</text>
+</svg>

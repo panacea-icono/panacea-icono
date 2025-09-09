@@ -1,0 +1,75 @@
+/* Panacea Icono S.A. - Colores Corporativos */
+:root {
+  /* Colores principales */
+  --panacea-primary: #1a365d;      /* Azul médico profundo */
+  --panacea-secondary: #2d5a87;    /* Azul médico medio */
+  --panacea-accent: #e53e3e;       /* Rojo médico de emergencia */
+  --panacea-success: #38a169;      /* Verde médico de éxito */
+  --panacea-warning: #d69e2e;      /* Amarillo de advertencia */
+  --panacea-info: #3182ce;         /* Azul informativo */
+  
+  /* Colores de texto */
+  --panacea-text-primary: #2d3748;   /* Texto principal */
+  --panacea-text-secondary: #718096; /* Texto secundario */
+  --panacea-text-light: #a0aec0;     /* Texto claro */
+  --panacea-text-white: #ffffff;     /* Texto blanco */
+  
+  /* Colores de fondo */
+  --panacea-bg-primary: #f7fafc;     /* Fondo principal */
+  --panacea-bg-secondary: #ffffff;   /* Fondo secundario */
+  --panacea-bg-dark: #1a202c;        /* Fondo oscuro */
+  --panacea-bg-gradient: linear-gradient(135deg, #f7fafc 0%, #e6fffa 100%);
+  
+  /* Colores de borde */
+  --panacea-border: #e2e8f0;         /* Borde estándar */
+  --panacea-border-light: #f1f5f9;   /* Borde claro */
+  --panacea-border-dark: #cbd5e0;    /* Borde oscuro */
+  
+  /* Colores de estado */
+  --panacea-success-bg: #f0fff4;     /* Fondo de éxito */
+  --panacea-warning-bg: #fffbeb;     /* Fondo de advertencia */
+  --panacea-error-bg: #fed7d7;       /* Fondo de error */
+  --panacea-info-bg: #ebf8ff;        /* Fondo informativo */
+  
+  /* Sombras */
+  --panacea-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --panacea-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  --panacea-shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --panacea-shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+  
+  /* Radios de borde */
+  --panacea-radius-sm: 4px;
+  --panacea-radius: 8px;
+  --panacea-radius-lg: 12px;
+  --panacea-radius-xl: 16px;
+  
+  /* Espaciado */
+  --panacea-space-xs: 0.25rem;
+  --panacea-space-sm: 0.5rem;
+  --panacea-space: 1rem;
+  --panacea-space-lg: 1.5rem;
+  --panacea-space-xl: 2rem;
+  --panacea-space-2xl: 3rem;
+}
+
+/* Clases utilitarias de colores */
+.text-panacea-primary { color: var(--panacea-primary); }
+.text-panacea-secondary { color: var(--panacea-secondary); }
+.text-panacea-accent { color: var(--panacea-accent); }
+.text-panacea-success { color: var(--panacea-success); }
+.text-panacea-warning { color: var(--panacea-warning); }
+.text-panacea-info { color: var(--panacea-info); }
+
+.bg-panacea-primary { background-color: var(--panacea-primary); }
+.bg-panacea-secondary { background-color: var(--panacea-secondary); }
+.bg-panacea-accent { background-color: var(--panacea-accent); }
+.bg-panacea-success { background-color: var(--panacea-success); }
+.bg-panacea-warning { background-color: var(--panacea-warning); }
+.bg-panacea-info { background-color: var(--panacea-info); }
+
+.border-panacea-primary { border-color: var(--panacea-primary); }
+.border-panacea-secondary { border-color: var(--panacea-secondary); }
+.border-panacea-accent { border-color: var(--panacea-accent); }
+.border-panacea-success { border-color: var(--panacea-success); }
+.border-panacea-warning { border-color: var(--panacea-warning); }
+.border-panacea-info { border-color: var(--panacea-info); }

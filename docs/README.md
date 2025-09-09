@@ -1,5 +1,9 @@
 # 📚 DOCUMENTACIÓN COMPLETA - PANACEA ICONO S.A.
 
+<div align="center">
+  <img src="../public/assets/logo-medical.svg" alt="Panacea Icono S.A. Logo" width="300" height="150">
+</div>
+
 **Fecha**: 2025-09-09
 **Versión**: v2025.09.09.0302
 **Empresa**: Panacea Icono S.A. · **RUC**: 1234567890123 · **Dirección**: Av. Principal #123, Santa Cruz de la Sierra, Bolivia
