@@ -12,6 +12,7 @@ HOST="${HOSTINGER_HOST:?set HOSTINGER_HOST}"
 USER="${HOSTINGER_USER:?set HOSTINGER_USER}"
 PASS="${HOSTINGER_PASSWORD:?set HOSTINGER_PASSWORD}"
 REMOTE_PATH="${HOSTINGER_PATH:-/public_html}"
+PORT="${HOSTINGER_PORT:-22}"
 
 # Rutas locales a sincronizar (evitar subir core de WP)
 SYNC_DIRS=(
@@ -27,6 +28,7 @@ for DIR in "${SYNC_DIRS[@]}"; do
     echo "Sincronizando $DIR -> $REMOTE_PATH/$DIR"
     lftp -u "$USER","$PASS" sftp://"$HOST" <<EOF2
 set sftp:auto-confirm yes
+set sftp:connect-program "ssh -p $PORT"
 mirror -R --only-newer --parallel=4 --verbose=1 --exclude-glob .git* --exclude-glob node_modules --exclude-glob *.map "$DIR" "$REMOTE_PATH/$DIR"
 quit
 EOF2
