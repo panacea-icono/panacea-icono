@@ -97,3 +97,57 @@ register_deactivation_hook(__FILE__, function () {
 add_action('panacea_daily_task', function () {
     // Placeholder: tareas diarias (limpieza, verificación, etc.)
 });
+
+/**
+ * Personalización de textos y ajustes básicos para Panacea Icono S.A.
+ * - Tagline, zona horaria, formatos, primer día de semana
+ * - Pie del admin, pantalla de login, remitente de emails
+ */
+add_action('init', function () {
+    if (!get_option('panacea_setup_done')) {
+        // Nombre del sitio y tagline
+        if (get_option('blogname') !== 'Panacea Icono S.A.') {
+            update_option('blogname', 'Panacea Icono S.A.');
+        }
+        if (get_option('blogdescription') !== 'Medicina Estética · Cirugía Plástica · IA · Web3') {
+            update_option('blogdescription', 'Medicina Estética · Cirugía Plástica · IA · Web3');
+        }
+
+        // Zona horaria y formatos
+        if (get_option('timezone_string') !== 'America/La_Paz') {
+            update_option('timezone_string', 'America/La_Paz');
+        }
+        if (get_option('date_format') !== 'd/m/Y') {
+            update_option('date_format', 'd/m/Y');
+        }
+        if (get_option('time_format') !== 'H:i') {
+            update_option('time_format', 'H:i');
+        }
+        if ((int) get_option('start_of_week') !== 1) {
+            update_option('start_of_week', 1);
+        }
+
+        update_option('panacea_setup_done', 1, true);
+    }
+});
+
+// Pie del administrador
+add_filter('admin_footer_text', function () {
+    return 'Panacea Icono S.A. — Ecosistema Médico (Santa Cruz de la Sierra, Bolivia) · ☎ +591 69674560 · ✉ repositorios.panacea@gmail.com · 🌐 panacea-icono.org';
+});
+
+// Pantalla de login
+add_filter('login_headertext', function () { return 'Panacea Icono S.A.'; });
+add_filter('login_headerurl', function () { return home_url('/'); });
+add_action('login_message', function () {
+    echo '<p style="text-align:center;margin:8px 0;color:#226;">🏥 Panacea Icono S.A. — Medicina Estética · Cirugía Plástica · IA · Web3</p>';
+});
+
+// Remitente de emails
+add_filter('wp_mail_from', function ($email) {
+    $domain = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'panacea-icono.org';
+    $default = 'wordpress@' . $domain;
+    if ($email && $email !== $default) { return $email; }
+    return 'no-reply@panacea-icono.org';
+});
+add_filter('wp_mail_from_name', function () { return 'Panacea Icono S.A.'; });
