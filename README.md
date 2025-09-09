@@ -16,6 +16,21 @@
 - Canal oficial: https://t.me/drtapiavargas_of
 - Sitio del CEO: https://drtapiavargas.com
 
+## 🚀 Quickstart
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+make dev  # inicia API en http://localhost:8000
+```
+
+## 📚 Documentación
+
+- Índice: [/docs/README.md](docs/README.md)
+- Resumen final: [/RESUMEN_FINAL_ECOSISTEMA_COMPLETO.md](RESUMEN_FINAL_ECOSISTEMA_COMPLETO.md)
+- Resumen sincronización: [/RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md](RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md)
+- Landing ejecutiva (local): [/public/index.html](public/index.html)
+
 ---
 
 ## Repositorios del Ecosistema
