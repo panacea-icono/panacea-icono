@@ -37,8 +37,10 @@ jobs:
           HOSTINGER_USER: ${{ secrets.HOSTINGER_USER }}
           HOSTINGER_PASSWORD: ${{ secrets.HOSTINGER_PASSWORD }}
           HOSTINGER_PATH: ${{ secrets.HOSTINGER_PATH }}
+          HOSTINGER_PORT: ${{ secrets.HOSTINGER_PORT }}
         run: |
           export HOSTINGER_HOST HOSTINGER_USER HOSTINGER_PASSWORD HOSTINGER_PATH
+          export HOSTINGER_PORT
           bash scripts/wp_deploy_sftp.sh
 
       - name: Post-deploy ping (opcional)
