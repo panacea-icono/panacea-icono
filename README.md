@@ -7,14 +7,16 @@
 - Documentación de repos: [/docs/REPOSITORIES.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOSITORIES.md)
 - Estructura y submódulos: [/docs/REPOS-STRUCTURE.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOS-STRUCTURE.md)
 
-# Panacea | Icono SA — Ecosistema
+# Panacea Icono S.A. — Ecosistema
 
 > Hub general del ecosistema. Este repositorio sirve como README maestro con enlaces, estado y documentación.
 
-- Landing: https://panacea-icono.org
+- Empresa: Panacea Icono S.A.
+- Dominio: https://panacea-icono.org
 - Hub técnico: https://github.com/panacea-icono/Ton-telegram
 - Canal oficial: https://t.me/drtapiavargas_of
 - Sitio del CEO: https://drtapiavargas.com
+- Contacto: repositorios.panacea@gmail.com · +591 69674560
 
 ## 🚀 Quickstart
 

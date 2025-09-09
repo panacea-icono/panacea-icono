@@ -2,7 +2,7 @@
 
 **Fecha**: 2025-09-09
 **Versión**: v2025.09.09.0302
-**Empresa**: Panacea Icono S.A.
+**Empresa**: Panacea Icono S.A. · **Dominio**: https://panacea-icono.org · **Contacto**: repositorios.panacea@gmail.com · +591 69674560
 
 ## 🎯 INTRODUCCIÓN
 
