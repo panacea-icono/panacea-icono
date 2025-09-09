@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional, List
 from pathlib import Path
 from datetime import datetime
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, HTMLResponse
 from pydantic import BaseModel, Field
@@ -333,6 +333,20 @@ async def list_workflows():
         }
     }
     return workflows
+
+# Webhook placeholder (p. ej., Telegram/externo)
+@app.post("/webhook/{source}")
+async def webhook_handler(source: str, request: Request):
+    """Webhook genérico de entrada. Guarda evento y responde 200.
+    Solo esqueleto; validación/firmas se agregan luego.
+    """
+    try:
+        payload = await request.json()
+    except Exception:
+        payload = {"raw": (await request.body()).decode(errors="ignore")}
+
+    logger.info(f"📥 Webhook recibido de {source}: {str(payload)[:500]}")
+    return {"status": "received", "source": source, "timestamp": datetime.now().isoformat()}
 
 # Hugging Face models (if available)
 @app.get("/huggingface/models")

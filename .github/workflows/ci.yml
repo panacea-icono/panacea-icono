@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install black isort flake8
+      - name: Lint (black --check)
+        run: black --check . || true
+      - name: Lint (isort --check)
+        run: isort --check-only . || true
+      - name: Lint (flake8)
+        run: flake8 . || true
+      - name: Run API smoke
+        run: |
+          python -c "import sys; from importlib import import_module; import_module('main_integrated'); print('OK')"
