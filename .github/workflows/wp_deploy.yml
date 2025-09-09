@@ -1,0 +1,46 @@
+name: WP Deploy to Hostinger
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_plugins:
+        description: 'Deploy wp-content/plugins'
+        required: false
+        default: 'true'
+      deploy_themes:
+        description: 'Deploy wp-content/themes'
+        required: false
+        default: 'true'
+      deploy_uploads:
+        description: 'Deploy wp-content/uploads'
+        required: false
+        default: 'false'
+  push:
+    branches: [ main ]
+    paths:
+      - 'public/**'
+      - 'wp-content/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Deploy to Hostinger via SFTP
+        env:
+          HOSTINGER_HOST: ${{ secrets.HOSTINGER_HOST }}
+          HOSTINGER_USER: ${{ secrets.HOSTINGER_USER }}
+          HOSTINGER_PASSWORD: ${{ secrets.HOSTINGER_PASSWORD }}
+          HOSTINGER_PATH: ${{ secrets.HOSTINGER_PATH }}
+        run: |
+          export HOSTINGER_HOST HOSTINGER_USER HOSTINGER_PASSWORD HOSTINGER_PATH
+          bash scripts/wp_deploy_sftp.sh
+
+      - name: Post-deploy ping (opcional)
+        run: |
+          echo "Despliegue completado $(date)"
