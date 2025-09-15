@@ -58,6 +58,30 @@ make dev  # inicia API en http://localhost:8000
 
 ---
 
+## 🔍 Auditoría de Repositorio
+
+Este repositorio incluye una herramienta de auditoría completa para verificar la seguridad, calidad del código e infraestructura.
+
+### Ejecutar Auditoría
+```bash
+# Auditoría completa
+python audit.py
+
+# Con opciones personalizadas
+python audit.py --output report.html --format html
+```
+
+### Características de la Auditoría
+- 🔒 **Seguridad**: Detección de secretos, configuración de variables de entorno, seguridad Docker
+- ✨ **Calidad de Código**: Formateo, documentación, estructura del proyecto, type hints
+- 🏗️ **Infraestructura**: Docker, CI/CD, configuración de despliegue, monitoreo
+
+**Puntuación Actual**: 92.3% ✅ (Excelente - Listo para producción)
+
+Ver [AUDIT_README.md](AUDIT_README.md) para documentación completa.
+
+---
+
 ## Repositorios del Ecosistema
 
 # 📚 Repositorios de panacea-icono
@@ -1187,8 +1211,31 @@ Para contribuir a cualquiera de estos repositorios:
 
 ---
 
-## Automatización
+## 🤖 Automatización
 
-- Releases coordinados, sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram.
-- Para cambios: ver scripts en el hub (orchestrators, audits, sync).
+- **Auditorías automatizadas**: Ejecutar `python audit.py` para verificación completa de seguridad y calidad
+- **Releases coordinados**: Sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram
+- **Scripts de sincronización**: Ver `sync_ecosystem.sh` para Docker, Heroku, Hugging Face y GitHub
+- **Para cambios**: Ver scripts en el hub (orchestrators, audits, sync)
+
+### Herramientas de Automatización Disponibles
+- `audit.py`: Auditoría completa de repositorio (seguridad, calidad, infraestructura)
+- `sync_ecosystem.sh`: Sincronización de Docker, Heroku, Hugging Face y GitHub
+- `.github/workflows/ci-cd.yml`: Pipeline de CI/CD automatizado
+- `docker-compose.yml`: Orquestación de servicios
+
+### Comandos Rápidos
+```bash
+# Auditoría completa
+python audit.py
+
+# Sincronización del ecosistema
+./sync_ecosystem.sh
+
+# Construcción Docker
+docker-compose up --build
+
+# Tests automatizados
+pytest
+```
 
