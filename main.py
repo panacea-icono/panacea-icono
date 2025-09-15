@@ -23,6 +23,16 @@ except ImportError:
     HuggingFaceManager = None
     HF_MANAGER_AVAILABLE = False
 
+# Import webhook functionality
+try:
+    from webhook_endpoints import webhook_router
+    from webhook_service import webhook_service
+    WEBHOOKS_AVAILABLE = True
+except ImportError:
+    webhook_router = None
+    webhook_service = None
+    WEBHOOKS_AVAILABLE = False
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -47,6 +57,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include webhook router if available
+if WEBHOOKS_AVAILABLE and webhook_router:
+    app.include_router(webhook_router)
+    logger.info("🔗 Webhook endpoints registered")
 
 # Pydantic models
 class HealthResponse(BaseModel):
@@ -88,12 +103,27 @@ async def startup_event():
             logger.error(f"❌ Error initializing Hugging Face manager: {e}")
             hf_manager = None
     
+    # Initialize webhook service
+    if WEBHOOKS_AVAILABLE and webhook_service:
+        try:
+            logger.info("🔗 Webhook service initialized")
+        except Exception as e:
+            logger.error(f"❌ Error initializing webhook service: {e}")
+    
     logger.info("🎉 PANACEA ICONO application started successfully!")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Cleanup on shutdown"""
     logger.info("🛑 Shutting down PANACEA ICONO application...")
+    
+    # Close webhook service
+    if WEBHOOKS_AVAILABLE and webhook_service:
+        try:
+            await webhook_service.close()
+            logger.info("🔗 Webhook service closed")
+        except Exception as e:
+            logger.error(f"❌ Error closing webhook service: {e}")
 
 @app.get("/", response_model=Dict[str, str])
 async def root():
@@ -115,6 +145,7 @@ async def health_check():
     services = {
         "app": "healthy",
         "huggingface": "healthy" if hf_manager else "unavailable",
+        "webhooks": "healthy" if WEBHOOKS_AVAILABLE else "unavailable",
         "docker": "healthy",
         "heroku": "healthy"
     }
@@ -268,6 +299,7 @@ async def get_info():
         "features": [
             "OpenAI Integration",
             "Hugging Face Models",
+            "Webhook System",
             "Docker Containerization",
             "Heroku Deployment",
             "FastAPI Web Framework",
@@ -279,6 +311,8 @@ async def get_info():
             "docs": "/docs",
             "ai_process": "/ai/process",
             "ai_models": "/ai/models",
+            "webhooks": "/webhooks",
+            "webhook_stats": "/webhooks/stats",
             "info": "/info"
         }
     }
