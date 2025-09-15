@@ -56,6 +56,17 @@ make dev  # inicia API en http://localhost:8000
 - Resumen sincronización: [/RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md](RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md)
 - Landing ejecutiva (local): [/public/index.html](public/index.html)
 
+## 🔗 Navegación Rápida del Ecosistema
+
+| Categoría | Repositorios Clave | Descripción |
+|-----------|-------------------|-------------|
+| **🎯 Hub Central** | [Ton-telegram](https://github.com/panacea-icono/Ton-telegram) | Bot de telegram wallet y hub de gestión |
+| **🤖 IA & Modelos** | [HUGGING_FACE](https://github.com/panacea-icono/HUGGING_FACE), [GPT-MAESTRO-PANACEA](https://github.com/panacea-icono/GPT-MAESTRO-PANACEA) | Modelos de inteligencia artificial |
+| **🏥 Aplicaciones** | [Dr_dela_TV](https://github.com/panacea-icono/Dr_dela_TV), [UNIVERSOLIFE](https://github.com/panacea-icono/UNIVERSOLIFE) | Apps principales del ecosistema |
+| **💰 Fintech** | [PANAS_PAY_APP](https://github.com/panacea-icono/PANAS_PAY_APP), [PANAS-TOKEN](https://github.com/panacea-icono/PANAS-TOKEN) | Soluciones de pagos y tokenización |
+| **🏗️ Infraestructura** | [PANACEA-API-CENTRAL-CODEX](https://github.com/panacea-icono/PANACEA-API-CENTRAL-CODEX), [codex-main](https://github.com/panacea-icono/codex-main) | APIs y arquitectura |
+| **🔧 Desarrollo** | [Super-code-tasker](https://github.com/panacea-icono/Super-code-tasker), [codex-github](https://github.com/panacea-icono/codex-github) | Herramientas de desarrollo |
+
 ---
 
 ## Repositorios del Ecosistema
@@ -262,7 +273,7 @@ cd HUGGING_FACE
 ```
 
 
-### 12. [modelos_civitai](https://github.com/https-panacea-icono-org/modelos_civitai)
+### 12. [modelos_civitai](https://github.com/panacea-icono/modelos_civitai)
 
 - **Descripción**: DATASETS-MODELS-SPACE
 - **Lenguaje**: Sin especificar
@@ -270,16 +281,16 @@ cd HUGGING_FACE
 - **Última actualización**: 5/9/2025
 - **Licencia**: MIT License
 - **Temas**: Ninguno
-- **URL**: [https://github.com/https-panacea-icono-org/modelos_civitai](https://github.com/https-panacea-icono-org/modelos_civitai)
+- **URL**: [https://github.com/panacea-icono/modelos_civitai](https://github.com/panacea-icono/modelos_civitai)
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/https-panacea-icono-org/modelos_civitai.git
+git clone https://github.com/panacea-icono/modelos_civitai.git
 cd modelos_civitai
 ```
 
 
-### 13. [HUGGING_FACE](https://github.com/https-panacea-icono-org/HUGGING_FACE)
+### 13. [HUGGING_FACE](https://github.com/panacea-icono/HUGGING_FACE)
 
 - **Descripción**: DATASETS-MODELS-SPACE
 - **Lenguaje**: Sin especificar
@@ -287,11 +298,11 @@ cd modelos_civitai
 - **Última actualización**: 5/9/2025
 - **Licencia**: MIT License
 - **Temas**: Ninguno
-- **URL**: [https://github.com/https-panacea-icono-org/HUGGING_FACE](https://github.com/https-panacea-icono-org/HUGGING_FACE)
+- **URL**: [https://github.com/panacea-icono/HUGGING_FACE](https://github.com/panacea-icono/HUGGING_FACE)
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/https-panacea-icono-org/HUGGING_FACE.git
+git clone https://github.com/panacea-icono/HUGGING_FACE.git
 cd HUGGING_FACE
 ```
 
@@ -874,7 +885,7 @@ cd PANACEA-ICONO-SOCIEDAD-ANONIMA--BANK
 ```
 
 
-### 48. [Super-code-tasker](https://github.com/https-panacea-icono-org/Super-code-tasker)
+### 48. [Super-code-tasker](https://github.com/panacea-icono/Super-code-tasker)
 
 - **Descripción**: SuperCodeTasker is a modular repository that hosts multiple AI-powered code generation agents. Built with OpenAI GPT integration and designed for flexibility, this platform enables task-specific agents to assist in software development, automation, and creative coding.
 - **Lenguaje**: TypeScript
@@ -882,11 +893,11 @@ cd PANACEA-ICONO-SOCIEDAD-ANONIMA--BANK
 - **Última actualización**: 31/5/2025
 - **Licencia**: Apache License 2.0
 - **Temas**: Ninguno
-- **URL**: [https://github.com/https-panacea-icono-org/Super-code-tasker](https://github.com/https-panacea-icono-org/Super-code-tasker)
+- **URL**: [https://github.com/panacea-icono/Super-code-tasker](https://github.com/panacea-icono/Super-code-tasker)
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/https-panacea-icono-org/Super-code-tasker.git
+git clone https://github.com/panacea-icono/Super-code-tasker.git
 cd Super-code-tasker
 ```
 
@@ -959,7 +970,7 @@ cd UNIVERSOLIFE
 ```
 
 
-### 53. [GPT-MAESTRO-PANACEA](https://github.com/https-panacea-icono-org/GPT-MAESTRO-PANACEA)
+### 53. [GPT-MAESTRO-PANACEA](https://github.com/panacea-icono/GPT-MAESTRO-PANACEA)
 
 - **Descripción**: GPT-MAESTRO-PANACEA
 - **Lenguaje**: Sin especificar
@@ -967,11 +978,11 @@ cd UNIVERSOLIFE
 - **Última actualización**: 23/4/2025
 - **Licencia**: MIT License
 - **Temas**: Ninguno
-- **URL**: [https://github.com/https-panacea-icono-org/GPT-MAESTRO-PANACEA](https://github.com/https-panacea-icono-org/GPT-MAESTRO-PANACEA)
+- **URL**: [https://github.com/panacea-icono/GPT-MAESTRO-PANACEA](https://github.com/panacea-icono/GPT-MAESTRO-PANACEA)
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/https-panacea-icono-org/GPT-MAESTRO-PANACEA.git
+git clone https://github.com/panacea-icono/GPT-MAESTRO-PANACEA.git
 cd GPT-MAESTRO-PANACEA
 ```
 
@@ -1076,8 +1087,8 @@ cd PANACEA_MD
 - [Dr_dela_TV](https://github.com/panacea-icono/Dr_dela_TV)
 - [tutor_academico_CIRUGIA_I-II-III](https://github.com/panacea-icono/tutor_academico_CIRUGIA_I-II-III)
 - [HUGGING_FACE](https://github.com/panacea-icono/HUGGING_FACE)
-- [modelos_civitai](https://github.com/https-panacea-icono-org/modelos_civitai)
-- [HUGGING_FACE](https://github.com/https-panacea-icono-org/HUGGING_FACE)
+- [modelos_civitai](https://github.com/panacea-icono/modelos_civitai)
+- [HUGGING_FACE](https://github.com/panacea-icono/HUGGING_FACE)
 - [civitAI](https://github.com/panacea-icono/civitAI)
 - [Marilyn_Monroe](https://github.com/panacea-icono/Marilyn_Monroe)
 - [dua_lipa_model_image_ia](https://github.com/panacea-icono/dua_lipa_model_image_ia)
@@ -1112,12 +1123,12 @@ cd PANACEA_MD
 - [privacidad_seguridad](https://github.com/panacea-icono/privacidad_seguridad)
 - [CASA-RED-SRL](https://github.com/panacea-icono/CASA-RED-SRL)
 - [PANACEA-ICONO-SOCIEDAD-ANONIMA--BANK](https://github.com/panacea-icono/PANACEA-ICONO-SOCIEDAD-ANONIMA--BANK)
-- [Super-code-tasker](https://github.com/https-panacea-icono-org/Super-code-tasker)
+- [Super-code-tasker](https://github.com/panacea-icono/Super-code-tasker)
 - [coca](https://github.com/panacea-icono/coca)
 - [macuquina_proyecto](https://github.com/panacea-icono/macuquina_proyecto)
 - [nextjs-with-supabase](https://github.com/panacea-icono/nextjs-with-supabase)
 - [UNIVERSOLIFE](https://github.com/panacea-icono/UNIVERSOLIFE)
-- [GPT-MAESTRO-PANACEA](https://github.com/https-panacea-icono-org/GPT-MAESTRO-PANACEA)
+- [GPT-MAESTRO-PANACEA](https://github.com/panacea-icono/GPT-MAESTRO-PANACEA)
 - [GPTApi](https://github.com/panacea-icono/GPTApi)
 - [TOKENIZER-NFT](https://github.com/panacea-icono/TOKENIZER-NFT)
 - [PANACEA-GPT-I](https://github.com/panacea-icono/PANACEA-GPT-I)
@@ -1160,15 +1171,30 @@ cd PANACEA_MD
 
 ---
 
-## 🤝 Contribuir
+## 🤝 Contribuir al Ecosistema
 
+### 🔄 Flujo de Contribución
 Para contribuir a cualquiera de estos repositorios:
 
-1. Fork el repositorio que te interese
-2. Crea una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
-3. Commit tus cambios: `git commit -m 'Add: nueva funcionalidad'`
-4. Push a la rama: `git push origin feature/nueva-funcionalidad`
-5. Abre un Pull Request
+1. **Fork** el repositorio que te interese
+2. **Clona** tu fork: `git clone https://github.com/tu-usuario/repositorio.git`
+3. **Crea** una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
+4. **Desarrolla** siguiendo las guías del ecosistema
+5. **Commit** tus cambios: `git commit -m 'Add: nueva funcionalidad'`
+6. **Push** a la rama: `git push origin feature/nueva-funcionalidad`
+7. **Abre** un Pull Request
+
+### 🔗 Coordinación entre Repositorios
+- **Consulta** siempre el [hub principal](https://github.com/panacea-icono/Ton-telegram) para cambios que afecten múltiples repos
+- **Utiliza** el script `sync_ecosystem.sh` para verificar compatibilidad
+- **Documenta** dependencias entre repositorios en tu PR
+- **Prueba** la integración con otros componentes del ecosistema
+
+### 📋 Guías de Desarrollo
+- **Estilo de código**: Seguir las configuraciones en `pyproject.toml`
+- **Testing**: Ejecutar tests antes de hacer PR
+- **Documentación**: Actualizar READMEs según corresponda
+- **Versionado**: Usar semantic versioning para releases coordinados
 
 ---
 
@@ -1187,8 +1213,33 @@ Para contribuir a cualquiera de estos repositorios:
 
 ---
 
-## Automatización
+## 🔄 Automatización y Comunicación entre Repositorios
 
-- Releases coordinados, sincronización de READMEs y auditorías se gestionan desde el hub Ton-telegram.
-- Para cambios: ver scripts en el hub (orchestrators, audits, sync).
+### 🎯 Hub Central de Gestión
+- **Hub principal**: [Ton-telegram](https://github.com/panacea-icono/Ton-telegram) - Centraliza la gestión del ecosistema
+- **Documentación**: [/docs/REPOSITORIES.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOSITORIES.md)
+- **Estructura**: [/docs/REPOS-STRUCTURE.md](https://github.com/panacea-icono/Ton-telegram/tree/main/docs/REPOS-STRUCTURE.md)
+
+### 🔗 Mecanismos de Comunicación
+- **Sincronización automatizada**: Script `sync_ecosystem.sh` para coordinar deployments
+- **Releases coordinados**: Gestión centralizada desde el hub Ton-telegram
+- **Auditorías cruzadas**: Verificación automática de estado entre repositorios
+- **READMEs sincronizados**: Actualización automática de documentación
+
+### 🛠️ Scripts de Orquestación
+- **sync_ecosystem.sh**: Sincronización completa (Docker + Heroku + Hugging Face + GitHub)
+- **huggingface_config.py**: Gestión de modelos de IA y configuración automática
+- **Orchestrators**: Scripts en el hub para gestión coordinada
+- **Audits**: Verificación automática de integridad del ecosistema
+
+### 🚀 Plataformas Integradas
+- **🐳 Docker**: Containerización y distribución automática
+- **🚀 Heroku**: Deployment automático de aplicaciones
+- **🤖 Hugging Face**: Gestión de modelos de IA
+- **📚 GitHub**: Control de versiones y automatización CI/CD
+
+### 📡 APIs y Endpoints
+- **API Central**: [PANACEA-API-CENTRAL-CODEX](https://github.com/panacea-icono/PANACEA-API-CENTRAL-CODEX)
+- **Webhooks**: Notificaciones automáticas entre repositorios
+- **Status monitoring**: Verificación de estado en tiempo real
 
