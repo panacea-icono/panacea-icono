@@ -56,6 +56,23 @@ make dev  # inicia API en http://localhost:8000
 - Resumen sincronización: [/RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md](RESUMEN_SINCRONIZACION_ECOSISTEMA_COMPLETO.md)
 - Landing ejecutiva (local): [/public/index.html](public/index.html)
 
+## 🚀 Desarrollo Integrado
+
+**Codespace del Ecosistema**: Este repositorio incluye un entorno de desarrollo integrado que permite trabajar con múltiples repositorios del ecosistema simultáneamente.
+
+- 📖 **Guía completa**: [CODESPACE.md](CODESPACE.md)
+- 🛠 **Setup automático**: Clonado y configuración de repositorios clave
+- 🧭 **Navegación integrada**: Scripts para gestionar múltiples repositorios
+- 📂 **Workspace multi-repositorio**: Configuración optimizada para VS Code
+
+```bash
+# Iniciar con GitHub Codespaces (recomendado)
+# Click "Code" → "Codespaces" → "Create codespace"
+
+# O usar el script de navegación una vez configurado
+./navigate-ecosystem.sh list
+```
+
 ---
 
 ## Repositorios del Ecosistema

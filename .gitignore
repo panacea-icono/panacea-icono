@@ -89,6 +89,11 @@ docker-compose.override.yml
 *.generated.*
 .env.generated
 
+# Ecosystem integration
+navigate-ecosystem.sh
+ecosystem/
+workspace-*
+
 # Secrets and tokens
 HEROKU_API_KEY=*
 GITHUB_TOKEN=*
